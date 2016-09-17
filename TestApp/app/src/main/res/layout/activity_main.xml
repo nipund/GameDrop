@@ -35,4 +35,13 @@
         android:id="@+id/listlayout"
         android:scrollIndicators="right"
         android:nestedScrollingEnabled="true"></LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play Game"
+        android:id="@+id/playButton"
+        android:layout_alignBottom="@+id/b1"
+        android:layout_alignEnd="@+id/listlayout"
+        android:layout_toEndOf="@+id/b1" />
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package nipun.test.myapplication;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +36,13 @@ public class MainActivity extends Activity {
                 newT.setPadding(10, 10, 10, 10);
                 LinearLayout layout = (LinearLayout) findViewById(R.id.listlayout);
                 layout.addView(newT);
+            }
+        });
+        Button pb = (Button) findViewById(R.id.playButton);
+        pb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, GameActivity.class));
             }
         });
     }
