@@ -1,20 +1,27 @@
 package nipun.test.myapplication;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends Activity {
 
     private GameView gameView;
 
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        gameView = new GameView(this);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        gameView = new GameView(this, size.x, size.y);
         setContentView(gameView);
     }
+
 
     @Override
     protected void onPause() {

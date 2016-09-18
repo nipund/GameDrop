@@ -5,36 +5,64 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class Player {
-    //Bitmap to get character from image
     private Bitmap bitmap;
-
-    //coordinates
     private int x;
     private int y;
-
-    //motion speed of the character
     private int speed = 0;
 
-    //constructor
-    public Player(Context context) {
+    private boolean boosting;
+
+    private final int GRAVITY = -11;
+
+    private int maxY;
+    private int minY;
+
+    private final int MIN_SPEED = 1;
+    private final int MAX_SPEED = 20;
+
+    public Player(Context context, int screenX, int screenY) {
         x = 75;
         y = 50;
         speed = 1;
-
-        //Getting bitmap from drawable resource
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
+        maxY = screenY - bitmap.getHeight();
+        minY = 0;
+        boosting = false;
     }
 
-    //Method to update coordinate of character
-    public void update(){
-        //updating x coordinate
-        x++;
+    public void setBoosting() {
+        boosting = true;
     }
 
-    /*
-    * These are getters you can generate it autmaticallyl
-    * right click on editor -> generate -> getters
-    * */
+    public void stopBoosting() {
+        boosting = false;
+    }
+
+    public void update() {
+        if (boosting) {
+            speed += 4;
+        } else {
+            speed -= 8;
+        }
+
+        if (speed > MAX_SPEED) {
+            speed = MAX_SPEED;
+        }
+
+        if (speed < MIN_SPEED) {
+            speed = MIN_SPEED;
+        }
+
+        y -= speed + GRAVITY;
+
+        if (y < minY) {
+            y = minY;
+        }
+        if (y > maxY) {
+            y = maxY;
+        }
+    }
+
     public Bitmap getBitmap() {
         return bitmap;
     }
