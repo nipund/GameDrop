@@ -16,15 +16,37 @@ public class Main {
 
 	public static void main(String[] args) {
 		makeJDBCConnection();
-		post("/create", (req, resp) -> createHandler());
+		post("/create", (req, resp) -> createHandler(req.body()));
+		get("/login", (req, resp) -> loginHandler(req.queryParams("name"), req.queryParams("pass")));
 	}
 
-	private static String createHandler() {
+	private static String loginHandler(String user, String pass) {
+		String getQuery = "SELECT * FROM users WHERE `name`= ?";
+		try {
+			PreparedStatement stat = conn.prepareStatement(getQuery);
+			stat.setString(1, user);
+			ResultSet rs = stat.executeQuery();
+			if(rs.next()){
+				if(DigestUtils.sha1Hex(pass).equals(rs.getString(3))) {
+					return "OK";
+				} else {
+					return "Incorrect password";
+				}
+			} else {
+				return "Username does not exist";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return "Exception";
+		}
+	}
+
+	private static String createHandler(String postBody) {
 		try {
 			String insertQuery = "INSERT INTO users VALUES (null,?,?,?,NOW())";
 			PreparedStatement stat = conn.prepareStatement(insertQuery);
 			MultiMap<String> params = new MultiMap<String>();
-			UrlEncoded.decodeTo(req.body(), params, "UTF-8");
+			UrlEncoded.decodeTo(postBody, params, "UTF-8");
 			stat.setString(1, params.getString("name"));
 			stat.setString(2, DigestUtils.sha1Hex(params.getString("pass")));
 			stat.setString(3, params.getString("email"));
