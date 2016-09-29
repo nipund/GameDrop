@@ -16,25 +16,27 @@ public class Main {
 
 	public static void main(String[] args) {
 		makeJDBCConnection();
-		post("/create", (req, resp) -> {
-			try {
-				String insertQuery = "INSERT INTO users VALUES (null,?,?,?,NOW())";
-				PreparedStatement stat = conn.prepareStatement(insertQuery);
-				MultiMap<String> params = new MultiMap<String>();
-				UrlEncoded.decodeTo(req.body(), params, "UTF-8");
-				stat.setString(1, params.getString("name"));
-				stat.setString(2, DigestUtils.sha1Hex(params.getString("pass")));
-				stat.setString(3, params.getString("email"));
-				if(stat.executeUpdate() == 1) {
-					return "OK";
-				} else {
-					return "Error";
-				} 
-			} catch (Exception e) {
-				e.printStackTrace();
-				return "Exception";
+		post("/create", (req, resp) -> createHandler());
+	}
+
+	private static String createHandler() {
+		try {
+			String insertQuery = "INSERT INTO users VALUES (null,?,?,?,NOW())";
+			PreparedStatement stat = conn.prepareStatement(insertQuery);
+			MultiMap<String> params = new MultiMap<String>();
+			UrlEncoded.decodeTo(req.body(), params, "UTF-8");
+			stat.setString(1, params.getString("name"));
+			stat.setString(2, DigestUtils.sha1Hex(params.getString("pass")));
+			stat.setString(3, params.getString("email"));
+			if(stat.executeUpdate() == 1) {
+				return "OK";
+			} else {
+				return "Error";
 			}
-		});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Exception";
+		}
 	}
 
 	private static void makeJDBCConnection() {
