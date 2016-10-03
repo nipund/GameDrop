@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.jetty.util.MultiMap;
 import org.eclipse.jetty.util.UrlEncoded;
+import org.json.JSONObject;
 
 public class Main {
 
@@ -16,56 +17,67 @@ public class Main {
 
 	public static void main(String[] args) {
 		makeJDBCConnection();
+		port(Integer.parseInt(args[0]));
+
+		before((req, resp) -> {
+			resp.type("application/json");
+		});
+
 		post("/create", (req, resp) -> createHandler(req.body()));
-		get("/login", (req, resp) -> loginHandler(req.queryParams("name"), req.queryParams("pass")));
+		get("/login/:name/:pass", (req, resp) -> loginHandler(req.params(":name"), req.params(":pass")));
+
+		exception(SQLException.class, (ex, req, resp) -> {
+			JSONObject obj = new JSONObject();
+			obj.put("success", false);
+			obj.put("message", "Exception thrown");
+			obj.put("debug", ex.getMessage());
+			resp.type("application/json");
+			resp.body(obj.toString());
+		});
 	}
 
-	private static String loginHandler(String user, String pass) {
+	private static String loginHandler(String user, String pass) throws SQLException {
 		String getQuery = "SELECT * FROM users WHERE `name`= ?";
-		try {
-			PreparedStatement stat = conn.prepareStatement(getQuery);
-			stat.setString(1, user);
-			ResultSet rs = stat.executeQuery();
-			if(rs.next()){
-				if(DigestUtils.sha1Hex(pass).equals(rs.getString(3))) {
-					return "OK";
-				} else {
-					return "Incorrect password";
-				}
+		JSONObject obj = new JSONObject();
+		PreparedStatement stat = conn.prepareStatement(getQuery);
+		stat.setString(1, user);
+		ResultSet rs = stat.executeQuery();
+		if(rs.next()) {
+			if(DigestUtils.sha1Hex(pass).equals(rs.getString(3))) {
+				obj.put("success", true);
 			} else {
-				return "Username does not exist";
+				obj.put("success", false);
+				obj.put("message", "Incorrect password");
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return "Exception";
+		} else {
+			obj.put("success", false);
+			obj.put("message", "Username does not exist");
 		}
+		return obj.toString();
 	}
 
-	private static String createHandler(String postBody) {
-		try {
-			String insertQuery = "INSERT INTO users VALUES (null,?,?,?,NOW())";
-			PreparedStatement stat = conn.prepareStatement(insertQuery);
-			MultiMap<String> params = new MultiMap<String>();
-			UrlEncoded.decodeTo(postBody, params, "UTF-8");
-			stat.setString(1, params.getString("name"));
-			stat.setString(2, DigestUtils.sha1Hex(params.getString("pass")));
-			stat.setString(3, params.getString("email"));
-			if(stat.executeUpdate() == 1) {
-				return "OK";
-			} else {
-				return "Error";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Exception";
+	private static String createHandler(String postBody) throws SQLException {
+		JSONObject obj = new JSONObject();
+		String insertQuery = "INSERT INTO users VALUES (null,?,?,?,NOW())";
+		PreparedStatement stat = conn.prepareStatement(insertQuery);
+		MultiMap<String> params = new MultiMap<String>();
+		UrlEncoded.decodeTo(postBody, params, "UTF-8");
+		stat.setString(1, params.getString("name"));
+		stat.setString(2, DigestUtils.sha1Hex(params.getString("pass")));
+		stat.setString(3, params.getString("email"));
+		if(stat.executeUpdate() == 1) {
+			obj.put("success", true);
+		} else {
+			obj.put("success", false);
 		}
+		return obj.toString();
 	}
 
 	private static void makeJDBCConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			System.err.println("Couldn't found JDBC driver.");
+			System.err.println("Couldn't find JDBC driver.");
 			return;
 		}
 
