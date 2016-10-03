@@ -1,5 +1,7 @@
 import static spark.Spark.*;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,6 +16,7 @@ import org.json.JSONObject;
 public class Main {
 
 	static Connection conn = null;
+	private static SecureRandom random = new SecureRandom();
 
 	public static void main(String[] args) {
 		makeJDBCConnection();
@@ -43,8 +46,18 @@ public class Main {
 		stat.setString(1, user);
 		ResultSet rs = stat.executeQuery();
 		if(rs.next()) {
-			if(DigestUtils.sha1Hex(pass).equals(rs.getString(3))) {
-				obj.put("success", true);
+			if(DigestUtils.sha1Hex(pass).equals(rs.getString("passhash"))) {
+				String session_id = new BigInteger(120, random).toString(32);
+				String insertQuery = "INSERT INTO sessions VALUES (?,?,NOW())";
+				PreparedStatement stat2 = conn.prepareStatement(insertQuery);
+				stat2.setString(1, session_id);
+				stat2.setInt(2, rs.getInt("id"));
+				if(stat2.executeUpdate() == 1) {
+					obj.put("success", true);
+					obj.put("session_id", session_id);
+				} else {
+					obj.put("success", false);
+				}
 			} else {
 				obj.put("success", false);
 				obj.put("message", "Incorrect password");
