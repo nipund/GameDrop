@@ -49,9 +49,11 @@ public class Main {
 			if(DigestUtils.sha1Hex(pass).equals(rs.getString("passhash"))) {
 				String session_id = new BigInteger(120, random).toString(32);
 				String insertQuery = "INSERT INTO sessions VALUES (?,?,NOW())";
+				insertQuery += "ON DUPLICATE KEY UPDATE id=?";
 				PreparedStatement stat2 = conn.prepareStatement(insertQuery);
 				stat2.setString(1, session_id);
 				stat2.setInt(2, rs.getInt("id"));
+				stat2.setString(3, session_id);
 				if(stat2.executeUpdate() == 1) {
 					obj.put("success", true);
 					obj.put("session_id", session_id);
