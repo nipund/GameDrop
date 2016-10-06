@@ -14,7 +14,7 @@ public class UserController {
 	private static SecureRandom random = new SecureRandom();
 	
 	static String login(String user, String pass) throws SQLException {
-		String getQuery = "SELECT * FROM users WHERE `name`= ?";
+		String getQuery = "SELECT * FROM users WHERE name= ?";
 		JSONObject obj = new JSONObject();
 		PreparedStatement stat = DBHelper.getConn().prepareStatement(getQuery);
 		stat.setString(1, user);

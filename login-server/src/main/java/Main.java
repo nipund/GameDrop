@@ -22,8 +22,12 @@ public class Main {
 			resp.type("application/json");
 		});
 
-		post("/create", (req, resp) -> UserController.create(req.body()));
-		get("/login/:name/:pass", (req, resp) -> UserController.login(req.params(":name"), req.params(":pass")));
+		post("/users/create",
+				(req, resp) -> UserController.create(req.body()));
+		get("/users/login/:name/:pass",
+				(req, resp) -> UserController.login(req.params(":name"), req.params(":pass")));
+		get("/markers/within/:lat/:lng/:distance",
+				(req, resp) -> MarkerController.within(req.params(":lat"), req.params(":lng"), req.params(":distance")));
 
 		exception(SQLException.class, (ex, req, resp) -> {
 			JSONObject obj = new JSONObject();
