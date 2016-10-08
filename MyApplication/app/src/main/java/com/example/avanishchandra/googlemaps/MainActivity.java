@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
@@ -15,12 +16,18 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.contextmanager.internal.TimeFilterImpl;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.api.Result;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -45,10 +52,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         onMapReady(userMap);
-        lRequest = new LocationRequest();
-        lRequest.setInterval(3000);
-        lRequest.setInterval(1000);
-        lRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         userGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -69,16 +72,37 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         initialMap();
     }
     public void onLocationChanged(Location location){
-    currentLocation = location;
+        if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            currentLocation = LocationServices.FusedLocationApi.getLastLocation(userGoogleApiClient);
+            if(currentLocation != null){
+                currentLatitudeText = String.valueOf(currentLocation.getLatitude());
+                currentLongitudeText = String.valueOf(currentLocation.getLongitude());
+                double n1 = Double.parseDouble(currentLatitudeText);
+                double n2 = Double.parseDouble(currentLongitudeText);
+                tempLng = new LatLng(n1,n2);
+                userMap.clear();
+                Marker temp = userMap.addMarker(new MarkerOptions().position(tempLng).title("Current Location: " + "Lat :"+n1+" "+"Long :"+n2));
+                System.out.println("MarkerMade");
+                System.out.println(n1 + " " + n2);
+            }else{
+                System.out.println("No location");
+            }
+        }
     }
     public void onConnected(Bundle bundle){
-        startLocationUpdates();
+        createLocationRequest();
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(lRequest);
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(userGoogleApiClient,builder.build());
+        if(lRequest != null) {
+            startLocationUpdates();
+        }
     }
     protected void startLocationUpdates() {
         System.out.println("Permissions");
         PackageManager packageManager = getApplicationContext().getPackageManager();
        if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             System.out.println("Entered Permissions");
+           LocationServices.FusedLocationApi.requestLocationUpdates(userGoogleApiClient,lRequest,this);
             currentLocation = LocationServices.FusedLocationApi.getLastLocation(userGoogleApiClient);
             if(currentLocation != null){
                 currentLatitudeText = String.valueOf(currentLocation.getLatitude());
@@ -125,5 +149,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (userGoogleApiClient.isConnected()) {
             startLocationUpdates();
         }
+    }
+    public void createLocationRequest(){
+        lRequest = new LocationRequest();
+        lRequest.setInterval(200);
+        lRequest.setFastestInterval(100);
+        lRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 }
