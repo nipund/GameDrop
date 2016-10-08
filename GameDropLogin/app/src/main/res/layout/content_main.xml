@@ -82,6 +82,7 @@
             android:text="ErrorMessage"
             android:textSize="30dp"
             android:textColor="#FF0000"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:visibility="invisible" />
     </LinearLayout>
 </RelativeLayout>
