@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:text="Timer" android:id="@+id/TextViewCount"
+        android:textSize="40dip" android:layout_marginBottom="10dip" />
+
+    <Button android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_gravity="center"
+        android:text="Timer" android:id="@+id/ButtonCount" android:minWidth="125dip"></Button>
+
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:text="Reset" android:id="@+id/TextViewDecrease"
+        android:textSize="40dip" android:layout_marginBottom="15dip" />
+
+    <Button android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_gravity="center"
+        android:text="Reset" android:id="@+id/negButton" android:minWidth="125dip"></Button>
+</LinearLayout>
