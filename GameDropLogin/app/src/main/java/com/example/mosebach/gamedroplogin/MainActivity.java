@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         //"http://proj-309-gp-06.cs.iastate.edu/users/login/" + userName.getText() + "/" + password.getText();
         //pat test     http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test
         //String URL = "http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test";
-        String URL = "https://aa6c7767.ngrok.io/users/login/pat/test";
+        String URL = "https://aa6c7767.ngrok.io/users/login/" + userName.getText().toString() + "/" + password.getText().toString();
         // Post params to be sent to the server
         //HashMap<String, String> params = new HashMap<String, String>();
         //params.put("token", "AbCdEfGh123456");
@@ -110,9 +110,11 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(req);
 
         if(result){
-            Intent i = new Intent(this, WelcomeActivity.class);
+            Intent i = new Intent(this, MapActivity.class);
             i.putExtra("Username", userName.getText().toString());
             startActivity(i);
+
+            errorText.setVisibility(View.INVISIBLE);
         }else{
             errorText.setVisibility(View.VISIBLE);
             errorText.setText("Incorrect Login");

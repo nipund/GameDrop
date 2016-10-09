@@ -1,4 +1,4 @@
-package com.example.avanishchandra.googlemaps;
+package com.example.mosebach.gamedroplogin;
 
 import android.app.PendingIntent;
 import android.content.pm.PackageManager;
@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -35,7 +36,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.LatLng;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener,
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
     private LatLng tempLng;
@@ -50,7 +51,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_map);
+
+        String text;
+        Bundle extras = getIntent().getExtras();
+        if(extras == null){
+            text = "";
+        }else{
+            text = extras.getString("Username");
+        }
+
+        TextView textView = (TextView) findViewById(R.id.textUsername);
+        textView.setText(text);
+
         onMapReady(userMap);
         userGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -100,9 +113,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void startLocationUpdates() {
         System.out.println("Permissions");
         PackageManager packageManager = getApplicationContext().getPackageManager();
-       if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             System.out.println("Entered Permissions");
-           LocationServices.FusedLocationApi.requestLocationUpdates(userGoogleApiClient,lRequest,this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(userGoogleApiClient,lRequest,this);
             currentLocation = LocationServices.FusedLocationApi.getLastLocation(userGoogleApiClient);
             if(currentLocation != null){
                 currentLatitudeText = String.valueOf(currentLocation.getLatitude());
