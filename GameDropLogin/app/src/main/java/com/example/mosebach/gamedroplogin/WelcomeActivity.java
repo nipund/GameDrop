@@ -12,13 +12,20 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        String text;
 
-        Intent i = getIntent();
-        String userName = i.getStringExtra("userName");
+        //Intent i = getIntent();
+        Bundle extras = getIntent().getExtras();
+        if(extras == null){
+            text = "";
+        }else{
+            text = extras.getString("Username");
+        }
+        //String userName = i.getStringExtra("Username");
 
-        TextView text = (TextView) findViewById(R.id.textUsername);
+        TextView textView = (TextView) findViewById(R.id.textUsername);
 
-        text.setText(userName.toString());
+        textView.setText(text);
 
     }
 }
