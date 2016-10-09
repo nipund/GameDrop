@@ -13,6 +13,15 @@ import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -35,6 +44,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
@@ -46,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     LocationRequest lRequest;
     private LocationManager myLocationManger;
     private Bundle bundle;
+    private String url = "http://proj-309-gp-06.cs.iastate.edu/markers/create";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+        //sendCoordToVolley();
         onStart();
     }
 
@@ -82,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 tempLng = new LatLng(n1,n2);
                 userMap.clear();
                 Marker temp = userMap.addMarker(new MarkerOptions().position(tempLng).title("Current Location: " + "Lat :"+n1+" "+"Long :"+n2));
+                sendCoordToVolley();
                 System.out.println("MarkerMade");
                 System.out.println(n1 + " " + n2);
             }else{
@@ -156,4 +174,43 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         lRequest.setFastestInterval(100);
         lRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
+    public void sendCoordToVolley() {
+       // final String URL = "/volley/resource/12";
+        // Post params to be sent to the server
+        System.out.println("preparing to post to volley");
+
+
+        StringRequest req = new StringRequest(Request.Method.POST, url, new Response.Listener<String>(){
+
+            @Override
+            public void onResponse(String response) {
+            System.out.println("VolleyResponse" +response);
+            }
+        }, new Response.ErrorListener()
+        {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            public Map<String,String> getParams() {
+                String keyName = "Current Location";
+                HashMap<String, String> params = new HashMap<String, String>();
+                //params.put("header", "application/x-www-form-urlencoded");
+                params.put("lat", "20");
+                params.put("lng", "30");
+                params.put("name", keyName);
+                return params;
+            }
+        };
+
+        // add the request object to the queue to be executed
+        RequestQueue rq = Volley.newRequestQueue(this);
+        rq.add(req);
+    }
+    public void postToVolley(){
+    }
+
 }
