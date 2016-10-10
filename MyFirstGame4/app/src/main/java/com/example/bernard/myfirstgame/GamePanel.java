@@ -4,11 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Bernard on 10/3/2016.
@@ -20,12 +22,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static final int MOVESPEED = -5;
     private long smokeStartTime;
     private long missileStartTime;
-    private long missileElapsed;
     private MainThread thread;
     private Background bg;
     private Player player;
     private ArrayList<Smokepuff> smoke;
     private ArrayList<Missile> missiles;
+    private Random rand = new Random();
 
     public GamePanel(Context context) {
         super(context);
@@ -92,14 +94,38 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             bg.update();
             player.update();
             //add missiles on Timer
-            long missilesElapsed = (System.nanoTime()-missileStartTime)/1000000;
-            if(missilesElapsed >(2000-player.getScore()/4)){
-
+            long missileElapsed = (System.nanoTime()-missileStartTime)/1000000;
+            if(missileElapsed >(2000-player.getScore()/4)){
+                System.out.println("making missiles");
                 //first missile in the middle
                 if(missiles.size()==0){
-                    missiles.add(new Missile (BitmapFactory.decodeResource(getResources(),R.drawable.missile),WIDTH +10, HEIGHT/2,45,15,player.getScore(),13));
+                    missiles.add(new Missile (BitmapFactory.decodeResource(getResources(),R.drawable.missile),WIDTH +10, HEIGHT/2,45,15
+                            ,player.getScore(),13));
                 }
+                else{
+                    missiles.add(new Missile(BitmapFactory.decodeResource(getResources(),R.drawable.missile),WIDTH+10 ,
+                            (int)(rand.nextDouble()*(HEIGHT)),45,15,player.getScore(),13));
 
+                }
+                //reset Timer
+            missileStartTime = System.nanoTime();
+            }
+            //loop through every missiles to check collision
+            for (int i= 0;i<missiles.size();i++)
+            {
+                missiles.get(i).update();
+                //remove missile and end game if collide
+                if(collision(missiles.get(i),player)){
+                    missiles.remove(i);
+                    player.setPlaying(false);
+                    break;
+                }
+                //remove missiles if off screen
+                if(missiles.get(i).getX()<-100)
+                {
+                    missiles.remove(i);
+                    break;
+                }
             }
 
             //add smoke puffs on timer
@@ -119,6 +145,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
 
     }
+    public boolean collision(GameObject a,GameObject b){
+        if (Rect.intersects(a.getRectangle(),b.getRectangle())){
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public void draw(Canvas canvas) {
@@ -135,7 +167,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             for(Smokepuff sp:smoke){
                 sp.draw(canvas);
             }
-
+            for(Missile m:missiles){
+                m.draw(canvas);
+            }
             canvas.restoreToCount(savedState);
         }
     }
