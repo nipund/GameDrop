@@ -1,6 +1,7 @@
 package com.example.bernard.myfirstgame;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -11,6 +12,7 @@ public class Game extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
         //turn title off
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //set screen to full screen
