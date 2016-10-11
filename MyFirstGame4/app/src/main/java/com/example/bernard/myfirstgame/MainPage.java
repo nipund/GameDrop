@@ -23,10 +23,9 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent toy = new Intent(MainPage.this,Game.class);
-                Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.helicopter); // your bitmap
-                ByteArrayOutputStream bs = new ByteArrayOutputStream();
-                b.compress(Bitmap.CompressFormat.PNG, 50, bs);
-                toy.putExtra("byteArray", bs.toByteArray());
+                Bundle bundle=new Bundle();
+                bundle.putInt("image",R.drawable.helicopter);
+                toy.putExtras(bundle);
                 startActivity(toy);
             }
 
@@ -35,10 +34,10 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent toy = new Intent(MainPage.this,Game.class);
-                Bitmap b = BitmapFactory.decodeResource(getResources(),R.drawable.ball); // your bitmap
-                ByteArrayOutputStream bs = new ByteArrayOutputStream();
-                b.compress(Bitmap.CompressFormat.PNG, 50, bs);
-                toy.putExtra("byteArray", bs.toByteArray());
+                Bundle bundle=new Bundle();
+                bundle.putInt("image",R.drawable.ball);
+                toy.putExtras(bundle);
+
                 startActivity(toy);
             }
 

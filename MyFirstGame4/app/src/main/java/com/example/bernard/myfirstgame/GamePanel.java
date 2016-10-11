@@ -28,8 +28,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private ArrayList<Smokepuff> smoke;
     private ArrayList<Missile> missiles;
     private Random rand = new Random();
+    private int sprite;
 
-    public GamePanel(Context context) {
+
+    public GamePanel(Context context, int pic) {
         super(context);
 
         //add callback to surface holder to intercept events
@@ -37,6 +39,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         thread = new MainThread(getHolder(), this);
         //make Game Panel so it can handle events
         setFocusable(true);
+        sprite = pic;
     }
 
     @Override
@@ -61,8 +64,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+
+        //draw
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.grassbg1));
-        player = new Player(BitmapFactory.decodeResource(getResources(),R.drawable.helicopter), 65,25,3);
+        player = new Player(BitmapFactory.decodeResource(getResources(), sprite), 65,25,1);
         smoke = new ArrayList<Smokepuff>();
         missiles = new ArrayList<Missile>();
         smokeStartTime= System.nanoTime();

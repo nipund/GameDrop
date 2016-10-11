@@ -8,15 +8,21 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class Game extends Activity {
+    int pic;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
+        //get intent
+
+        Bundle bundle = this.getIntent().getExtras();
+        pic = bundle.getInt("image");
+
         //turn title off
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //set screen to full screen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(new GamePanel(this));
+        setContentView(new GamePanel(this, pic));
     }
 }
