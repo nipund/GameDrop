@@ -27,9 +27,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Player player;
     private ArrayList<Smokepuff> smoke;
     private ArrayList<Missile> missiles;
+    private ArrayList<TopBorder> topborder;
+    private ArrayList<BottomBorder> bottomborder;
     private Random rand = new Random();
     private int sprite;
-
+    private int maxBorderHeight;
+    private int minBorderHeight;
+    private boolean topDown = true;
+    private boolean botDown = true;
+    //difficulty progression ,increase to slow
+    private int progressDenom = 20;
 
     public GamePanel(Context context, int pic) {
         super(context);
@@ -70,6 +77,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         player = new Player(BitmapFactory.decodeResource(getResources(), sprite), 65,25,1);
         smoke = new ArrayList<Smokepuff>();
         missiles = new ArrayList<Missile>();
+        topborder = new ArrayList<TopBorder>();
+        bottomborder = new ArrayList<BottomBorder>();
+
         smokeStartTime= System.nanoTime();
         missileStartTime = System.nanoTime();
         //we can start game loop
@@ -98,6 +108,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if(player.getPlaying()) {
             bg.update();
             player.update();
+            //calculate height to be based on score
+            //border direction switch when min or max is reached
+
+            maxBorderHeight= 30+ player.getScore()/progressDenom;
+            //cap max border height to 1/2 of screen
+            if(maxBorderHeight > HEIGHT /4 )
+                maxBorderHeight = HEIGHT /4;
+
+            minBorderHeight = 5+player.getScore()/progressDenom ;
+            //update border
+            this.updateTopBorder();
+
+            this.updateBottomBorder();
             //add missiles on Timer
             long missileElapsed = (System.nanoTime()-missileStartTime)/1000000;
             if(missileElapsed >(2000-player.getScore()/4)){
@@ -177,6 +200,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
             canvas.restoreToCount(savedState);
         }
+    }
+    public void updateTopBorder(){
+        //every 50 points ,insert random blocks
+        if(player.getScore()%50 == 0){
+            topborder.add(new TopBorder(BitmapFactory.decodeResource(getResources(),R.drawable.brick),topborder.get
+                    (topborder.size()-1).getX()+20,0,(int)((rand.nextDouble()*(maxBorderHeight))+1)));
+        }
+
+    }
+    public void updateBottomBorder(){
+        //every 40 pts, insert random
+        if(player.getScore()%50 == 0){
+        bottomborder.add(new BottomBorder(BitmapFactory.decodeResource(getResources(),R.drawable.brick),bottomborder.get
+                (bottomborder.size()-1).getX()+20,(int)((rand.nextDouble()*(maxBorderHeight)))));
     }
 
 }
