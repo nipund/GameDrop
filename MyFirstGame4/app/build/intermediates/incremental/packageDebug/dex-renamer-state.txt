@@ -1,0 +1,7 @@
+#Tue Oct 11 16:45:22 CDT 2016
+base.0=C\:\\Users\\Bernard\\.git\\GP-06_GameDrop\\MyFirstGame4\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_bc46739e6eddd6ccd15c59a16fb724418be6c5e6
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=C\:\\Users\\Bernard\\.git\\GP-06_GameDrop\\MyFirstGame4\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_34a0f2ae8a5c4bc03127d5481bb9f8b661a25e4c\\classes.dex
+base.1=C\:\\Users\\Bernard\\.git\\GP-06_GameDrop\\MyFirstGame4\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_34a0f2ae8a5c4bc03127d5481bb9f8b661a25e4c
+file.0=C\:\\Users\\Bernard\\.git\\GP-06_GameDrop\\MyFirstGame4\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_bc46739e6eddd6ccd15c59a16fb724418be6c5e6\\classes.dex
