@@ -1,46 +1,33 @@
 package com.example.mosebach.gamedroplogin;
 
-import android.app.PendingIntent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.PermissionChecker;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.app.Activity;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.contextmanager.internal.TimeFilterImpl;
-import com.google.android.gms.location.FusedLocationProviderApi;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.api.Result;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.LatLng;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
     private LatLng tempLng;
-    private String currentLatitudeText,currentLongitudeText;
     private Location currentLocation;
     private GoogleMap userMap;
     GoogleApiClient userGoogleApiClient;
@@ -63,7 +50,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         TextView textView = (TextView) findViewById(R.id.textUsername);
         textView.setText(text);
-
         onMapReady(userMap);
         userGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -88,13 +74,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             currentLocation = LocationServices.FusedLocationApi.getLastLocation(userGoogleApiClient);
             if(currentLocation != null){
-                currentLatitudeText = String.valueOf(currentLocation.getLatitude());
-                currentLongitudeText = String.valueOf(currentLocation.getLongitude());
-                double n1 = Double.parseDouble(currentLatitudeText);
-                double n2 = Double.parseDouble(currentLongitudeText);
+                double n1 = currentLocation.getLatitude();
+                double n2 = currentLocation.getLongitude();
                 tempLng = new LatLng(n1,n2);
                 userMap.clear();
                 Marker temp = userMap.addMarker(new MarkerOptions().position(tempLng).title("Current Location: " + "Lat :"+n1+" "+"Long :"+n2));
+                userMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tempLng, 17));
                 System.out.println("MarkerMade");
                 System.out.println(n1 + " " + n2);
             }else{
@@ -118,10 +103,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             LocationServices.FusedLocationApi.requestLocationUpdates(userGoogleApiClient,lRequest,this);
             currentLocation = LocationServices.FusedLocationApi.getLastLocation(userGoogleApiClient);
             if(currentLocation != null){
-                currentLatitudeText = String.valueOf(currentLocation.getLatitude());
-                currentLongitudeText = String.valueOf(currentLocation.getLongitude());
-                double n1 = Double.parseDouble(currentLatitudeText);
-                double n2 = Double.parseDouble(currentLongitudeText);
+                double n1 = currentLocation.getLongitude();
+                double n2 = currentLocation.getLongitude();
                 tempLng = new LatLng(n1,n2);
                 Marker temp = userMap.addMarker(new MarkerOptions().position(tempLng).title("Current Location"));
                 System.out.println("MarkerMade");

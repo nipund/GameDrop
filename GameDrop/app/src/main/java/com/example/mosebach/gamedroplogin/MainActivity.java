@@ -28,7 +28,9 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
 
-    boolean result = false;
+    private boolean result = false;
+    private EditText userName, password;
+    private TextView errorText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        userName = (EditText) findViewById(R.id.username);
+        password = (EditText) findViewById(R.id.password);
+        errorText = (TextView) findViewById(R.id.errorText);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,11 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void fabClick(View view){
 
-        EditText userName = (EditText) findViewById(R.id.username);
-        EditText password = (EditText) findViewById(R.id.password);
-
-        TextView errorText = (TextView) findViewById(R.id.errorText);
-
         //"http://proj-309-gp-06.cs.iastate.edu/users/login/" + userName.getText() + "/" + password.getText();
         //pat test     http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test
         //String URL = "http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test";
@@ -84,15 +83,22 @@ public class MainActivity extends AppCompatActivity {
         //HashMap<String, String> params = new HashMap<String, String>();
         //params.put("token", "AbCdEfGh123456");
 
-
-
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             VolleyLog.v("Response:%n %s", response.toString(4));
-                            //System.out.println(response.getBoolean("success"));
+                            if(response.getBoolean("success")){
+                                Intent i = new Intent(MainActivity.this, MapActivity.class);
+                                i.putExtra("Username", userName.getText().toString());
+                                startActivity(i);
+
+                                errorText.setVisibility(View.INVISIBLE);
+                            }else{
+                                errorText.setVisibility(View.VISIBLE);
+                                errorText.setText("Incorrect Login");
+                            }
                             result = response.getBoolean("success");
 
                         } catch (JSONException e) {
@@ -108,20 +114,6 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(req);
-
-        if(result){
-            Intent i = new Intent(this, MapActivity.class);
-            i.putExtra("Username", userName.getText().toString());
-            startActivity(i);
-
-            errorText.setVisibility(View.INVISIBLE);
-        }else{
-            errorText.setVisibility(View.VISIBLE);
-            errorText.setText("Incorrect Login");
-        }
-
-
-        return;
     }
 
 }
