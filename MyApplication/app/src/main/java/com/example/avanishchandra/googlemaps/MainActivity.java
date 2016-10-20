@@ -11,8 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
+import android.content.Intent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -199,8 +204,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 String keyName = "Current Location";
                 HashMap<String, String> params = new HashMap<String, String>();
                 //params.put("header", "application/x-www-form-urlencoded");
-                params.put("lat", "20");
-                params.put("lng", "30");
+                params.put("lat", currentLatitudeText);
+                params.put("lng", currentLongitudeText);
                 params.put("name", keyName);
                 return params;
             }
@@ -212,5 +217,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
     public void postToVolley(){
     }
-
+    public void levelEditor(View view){
+      Intent intent = new Intent(this, LevelEditor.class);
+      //startActivity(intent);
+    }
 }
