@@ -80,6 +80,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .build();
         //sendCoordToVolley();
         onStart();
+       Button moveToLocation = (Button)findViewById(R.id.LevelEditorButton);
+       moveToLocation.setOnClickListener(new View.OnClickListener(){
+           @Override
+           public void onClick(View view){
+               Intent intent = new Intent(MainActivity.this, LevelEditor.class);
+               startActivity(intent);
+           }
+       });
     }
 
     private void initialMap() {
@@ -216,9 +224,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         rq.add(req);
     }
     public void postToVolley(){
-    }
-    public void levelEditor(View view){
-      Intent intent = new Intent(this, LevelEditor.class);
-      //startActivity(intent);
     }
 }

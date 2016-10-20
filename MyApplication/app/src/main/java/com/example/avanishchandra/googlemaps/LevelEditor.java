@@ -61,5 +61,6 @@ public class LevelEditor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         System.out.println("Entered levelEditor");
+        Intent intent = getIntent();
     }
 }
