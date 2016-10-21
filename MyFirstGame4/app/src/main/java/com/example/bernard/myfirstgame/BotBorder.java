@@ -1,29 +1,30 @@
 package com.example.bernard.myfirstgame;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-public class TopBorder extends GameObject{
-    private Bitmap image;
+public class BotBorder extends GameObject{
 
-    public TopBorder(Bitmap res, int x, int y, int h)
+    private Bitmap image;
+    public BotBorder(Bitmap res, int x, int y)
     {
-        height = h;
+        height = 200;
         width = 20;
 
         this.x = x;
         this.y = y;
-
         dx = GamePanel.MOVESPEED;
+
         image = Bitmap.createBitmap(res, 0, 0, width, height);
+
     }
     public void update()
     {
-        x+=dx;
+        x +=dx;
+
     }
     public void draw(Canvas canvas)
     {
-        try{canvas.drawBitmap(image,x,y,null);}catch(Exception e){};
-    }
+        canvas.drawBitmap(image, x, y, null);
 
+    }
 }
