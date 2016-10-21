@@ -1,10 +1,12 @@
 package com.example.avanishchandra.googlemaps;
 
+import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +47,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -64,9 +67,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap userMap;
     GoogleApiClient userGoogleApiClient;
     LocationRequest lRequest;
+    private SupportMapFragment myMapFrag;
+    private MapFragment tempFrag;
     private LocationManager myLocationManger;
     private Bundle bundle;
     private String url = "http://proj-309-gp-06.cs.iastate.edu/markers/create";
+    //private Boolean levelToggle,markerToggle = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,19 +86,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .build();
         //sendCoordToVolley();
         onStart();
-       Button moveToLocation = (Button)findViewById(R.id.LevelEditorButton);
+       final Button moveToLocation = (Button)findViewById(R.id.LevelEditorButton);
+      moveToLocation.setText("level Editor");
        moveToLocation.setOnClickListener(new View.OnClickListener(){
            @Override
            public void onClick(View view){
-               Intent intent = new Intent(MainActivity.this, LevelEditor.class);
-               startActivity(intent);
+               //if(levelToggle == false) {
+                   Intent intent = new Intent(MainActivity.this, LevelEditor.class);
+                   startActivity(intent);
+                   moveToLocation.setEnabled(false);
+
+                   //levelToggle = true;
+               //}
            }
        });
     }
 
     private void initialMap() {
         if (userMap == null) {
-            MapFragment tempFrag = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+            tempFrag = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
             tempFrag.getMapAsync(this);
         }
     }
@@ -112,6 +124,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 tempLng = new LatLng(n1,n2);
                 userMap.clear();
                 Marker temp = userMap.addMarker(new MarkerOptions().position(tempLng).title("Current Location: " + "Lat :"+n1+" "+"Long :"+n2));
+                userMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        if(marker.getTitle() != null){
+                            //if(markerToggle == false) {
+                                Intent intent = new Intent(MainActivity.this, LocationPage.class);
+                                startActivity(intent);
+                                //levelToggle = true;
+                            //}
+                        }
+                        return true;
+                    }
+                });
                 sendCoordToVolley();
                 System.out.println("MarkerMade");
                 System.out.println(n1 + " " + n2);

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import android.content.Intent;
@@ -56,11 +57,11 @@ import java.util.Map;
 /**
  * Created by Avanish Chandra on 10/20/2016.
  */
-public class LevelEditor extends AppCompatActivity {
+public class LocationPage extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.level_editor);
-        System.out.println("Entered levelEditor");
+        setContentView(R.layout.location_page);
+        System.out.println("Entered locationPage");
         Intent intent = getIntent();
     }
 }
