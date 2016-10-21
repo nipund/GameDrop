@@ -35,11 +35,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAdKQhrDCawfmrAm5HydYW_H-_OwRjRFng" />
 
-        <activity android:name=".EditorActivity"
-            android:exported="true"
-            >
-
-        </activity>
+        <activity
+            android:name=".EditorActivity"
+            android:exported="true"></activity>
+        <activity android:name=".ElementSelectorActivity"></activity>
     </application>
 
 </manifest>
