@@ -6,19 +6,30 @@ import android.graphics.drawable.Drawable;
  *
  * Created by mosebach on 10/17/2016.
  */
-public abstract class GameElement {
+public class GameElement {
 
     Drawable pic;
     int x, y;
+    int width, height;
     String name;
     //tied to another element?do elements keep score or level?
 
     // Set construct
-    public GameElement(Drawable pic, int x, int y, String name){
+    public GameElement(Drawable pic, int x, int y, int width, int height, String name){
         this.pic = pic;
         this.x = x;
         this.y = y;
+        this.width = width;
+        this.height = height;
         this.name = name;
+    }
+
+    public int getRight() {
+        return x + width;
+    }
+
+    public int getBottom() {
+        return y - height;
     }
 
     // Default construct

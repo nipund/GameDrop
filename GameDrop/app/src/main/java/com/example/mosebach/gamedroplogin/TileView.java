@@ -4,8 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
+
+import java.util.ArrayList;
 
 /**
  * Created by Nipun on 10/20/2016.
@@ -14,20 +17,30 @@ import android.view.View;
 public class TileView extends View {
 
     private Paint paint;
+    ArrayList<GameElement> elements;
 
     public TileView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setBackgroundColor(Color.BLACK);
         paint = new Paint();
+        elements = new ArrayList<>();
     }
 
     @Override
     protected void onDraw(Canvas c) {
-        paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
         paint.setColor(Color.RED);
         drawGrid(c, 20, 16);
-        c.drawCircle(this.getMeasuredWidth()/2, this.getMeasuredHeight()/2, 20, paint);
+
+        if(elements != null) {
+            for(GameElement ge : elements) {
+                Drawable d = ge.pic;
+                //d.setBounds(ge.x, ge.y, ge.getRight(), ge.getBottom());
+                d.setBounds(this.getMeasuredWidth()/2, this.getMeasuredHeight()/2, (this.getMeasuredWidth()/2) + 100, (this.getMeasuredHeight()/2) + 100);
+                d.setAlpha(255);
+                d.draw(c);
+            }
+        }
     }
 
     private void drawGrid(Canvas c, int rows, int columns) {

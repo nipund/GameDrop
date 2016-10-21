@@ -1,5 +1,7 @@
 package com.example.mosebach.gamedroplogin;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,10 +19,12 @@ public class ElementSelectorActivity extends AppCompatActivity {
         gridview.setAdapter(new ElementAdapter(this));
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(ElementSelectorActivity.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("position", position);
+                returnIntent.putExtra("drawable_id", id);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
             }
         });
 

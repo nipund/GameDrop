@@ -27,7 +27,7 @@ public class ElementAdapter extends BaseAdapter {
     }
 
     public long getItemId(int position) {
-        return 0;
+        return mThumbIds[position];
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ElementAdapter extends BaseAdapter {
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+            imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
         } else {
@@ -47,6 +47,7 @@ public class ElementAdapter extends BaseAdapter {
     }
 
     private Integer[] mThumbIds = {
-            R.drawable.sample_element_1
+            R.drawable.sample_element_1,
+            R.drawable.basketball
     };
 }
