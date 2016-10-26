@@ -19,6 +19,7 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
         tv = (TileView) findViewById(R.id.tileView);
+        tv.setOnTouchListener(new EditorTouchListener(tv, this));
     }
 
     @Override
@@ -48,7 +49,7 @@ public class EditorActivity extends AppCompatActivity {
                 Toast.makeText(this, "DEBUG: Selected element " + position + ", ID: " + id,
                         Toast.LENGTH_SHORT).show();
                 Drawable d = ContextCompat.getDrawable(getApplicationContext(), id);
-                tv.elements.add(new GameElement(d, 0, 0, 100, 100, "Test"));
+                tv.elements.add(new GameElement(d, 100, 100, 100, 100, "Test"));
                 tv.invalidate();
             }
         }

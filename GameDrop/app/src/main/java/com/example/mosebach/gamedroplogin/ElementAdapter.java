@@ -46,7 +46,7 @@ public class ElementAdapter extends BaseAdapter {
         return imageView;
     }
 
-    private Integer[] mThumbIds = {
+    private static Integer[] mThumbIds = {
             R.drawable.sample_element_1,
             R.drawable.basketball
     };

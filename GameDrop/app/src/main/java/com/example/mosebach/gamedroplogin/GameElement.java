@@ -29,7 +29,7 @@ public class GameElement {
     }
 
     public int getBottom() {
-        return y - height;
+        return y + height;
     }
 
     // Default construct

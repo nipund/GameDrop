@@ -18,6 +18,7 @@ public class TileView extends View {
 
     private Paint paint;
     ArrayList<GameElement> elements;
+    private int selected;
 
     public TileView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -35,8 +36,8 @@ public class TileView extends View {
         if(elements != null) {
             for(GameElement ge : elements) {
                 Drawable d = ge.pic;
-                //d.setBounds(ge.x, ge.y, ge.getRight(), ge.getBottom());
-                d.setBounds(this.getMeasuredWidth()/2, this.getMeasuredHeight()/2, (this.getMeasuredWidth()/2) + 100, (this.getMeasuredHeight()/2) + 100);
+                d.setBounds(ge.x, ge.y, ge.getRight(), ge.getBottom());
+                //d.setBounds(this.getMeasuredWidth()/2, this.getMeasuredHeight()/2, (this.getMeasuredWidth()/2) + 100, (this.getMeasuredHeight()/2) + 100);
                 d.setAlpha(255);
                 d.draw(c);
             }
@@ -57,6 +58,23 @@ public class TileView extends View {
         for (int k = 0; k < columns; k++)
             c.drawLine(k*wdOfRow, 0, k*wdOfRow, height, paint);
         paint.setColor(tempColor);
+    }
+
+    public void testMove(float dx, float dy) {
+        GameElement el = elements.get(0);
+        el.x += dx;
+        el.y += dy;
+        elements.remove(0);
+        elements.add(0, el);
+        invalidate();
+    }
+
+    private void cycleElements() {
+        if(selected == elements.size() - 1) {
+            selected = 0;
+        } else {
+            selected++;
+        }
     }
 
 }
