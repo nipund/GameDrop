@@ -35,6 +35,10 @@ public class EditorActivity extends AppCompatActivity {
                 Intent i = new Intent(this, ElementSelectorActivity.class);
                 startActivityForResult(i, 1);
                 return true;
+            case R.id.next_element:
+                tv.nextElement();
+                tv.invalidate();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -46,10 +50,9 @@ public class EditorActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 int position = data.getIntExtra("position", -1);
                 int id = (int) data.getLongExtra("drawable_id", -1);
-                Toast.makeText(this, "DEBUG: Selected element " + position + ", ID: " + id,
-                        Toast.LENGTH_SHORT).show();
                 Drawable d = ContextCompat.getDrawable(getApplicationContext(), id);
                 tv.elements.add(new GameElement(d, 100, 100, 100, 100, "Test"));
+                tv.selectLastElement();
                 tv.invalidate();
             }
         }

@@ -30,16 +30,22 @@ public class TileView extends View {
     @Override
     protected void onDraw(Canvas c) {
         paint.setAntiAlias(true);
-        paint.setColor(Color.RED);
         drawGrid(c, 20, 16);
+        paint.setARGB(255, 0, 255, 0);
 
         if(elements != null) {
-            for(GameElement ge : elements) {
+            for(int i = 0; i < elements.size(); i++) {
+                GameElement ge = elements.get(i);
                 Drawable d = ge.pic;
                 d.setBounds(ge.x, ge.y, ge.getRight(), ge.getBottom());
-                //d.setBounds(this.getMeasuredWidth()/2, this.getMeasuredHeight()/2, (this.getMeasuredWidth()/2) + 100, (this.getMeasuredHeight()/2) + 100);
                 d.setAlpha(255);
                 d.draw(c);
+                if(selected == i) {
+                    c.drawLine(ge.x, ge.y, ge.getRight(), ge.y, paint);
+                    c.drawLine(ge.getRight(), ge.y, ge.getRight(), ge.getBottom(), paint);
+                    c.drawLine(ge.getRight(), ge.getBottom(), ge.x, ge.getBottom(), paint);
+                    c.drawLine(ge.x, ge.getBottom(), ge.x, ge.y, paint);
+                }
             }
         }
     }
@@ -61,11 +67,11 @@ public class TileView extends View {
     }
 
     public void testMove(float dx, float dy) {
-        elements.get(0).move(dx, dy);
+        elements.get(selected).move(dx, dy);
         invalidate();
     }
 
-    private void cycleElements() {
+    public void nextElement() {
         if(selected == elements.size() - 1) {
             selected = 0;
         } else {
@@ -73,4 +79,7 @@ public class TileView extends View {
         }
     }
 
+    public void selectLastElement() {
+        selected = elements.size() - 1;
+    }
 }

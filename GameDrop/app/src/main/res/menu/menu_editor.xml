@@ -2,6 +2,10 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:title="Next Element"
+        android:id="@+id/next_element"
+        android:icon="@drawable/ic_next"
+        app:showAsAction="always" />
     <item android:title="Add New Element"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_input_add"
