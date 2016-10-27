@@ -61,11 +61,7 @@ public class TileView extends View {
     }
 
     public void testMove(float dx, float dy) {
-        GameElement el = elements.get(0);
-        el.x += dx;
-        el.y += dy;
-        elements.remove(0);
-        elements.add(0, el);
+        elements.get(0).move(dx, dy);
         invalidate();
     }
 

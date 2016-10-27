@@ -32,6 +32,32 @@ public class GameElement {
         return y + height;
     }
 
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void move(int dx, int dy) {
+        this.x += dx;
+        this.y += dy;
+    }
+
+    public void move(float dx, float dy) {
+        this.x += dx;
+        this.y += dy;
+    }
+
     // Default construct
     public GameElement(){
         pic = null;
