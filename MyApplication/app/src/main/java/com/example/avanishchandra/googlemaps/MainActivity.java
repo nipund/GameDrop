@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
+import static java.lang.Math.hypot;
 
 import android.content.Intent;
 import android.view.View;
@@ -73,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Bundle bundle;
     private String url = "http://proj-309-gp-06.cs.iastate.edu/markers/create";
     //private Boolean levelToggle,markerToggle = false;
-
+    public double n1 = 0;
+    public double n2 = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             if(currentLocation != null){
                 currentLatitudeText = String.valueOf(currentLocation.getLatitude());
                 currentLongitudeText = String.valueOf(currentLocation.getLongitude());
-                double n1 = Double.parseDouble(currentLatitudeText);
-                double n2 = Double.parseDouble(currentLongitudeText);
+                n1 = Double.parseDouble(currentLatitudeText);
+                n2 = Double.parseDouble(currentLongitudeText);
                 tempLng = new LatLng(n1,n2);
                 userMap.clear();
                 Marker temp = userMap.addMarker(new MarkerOptions().position(tempLng).title("Current Location: " + "Lat :"+n1+" "+"Long :"+n2));
@@ -130,6 +132,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if(marker.getTitle() != null){
                             //if(markerToggle == false) {
                                 Intent intent = new Intent(MainActivity.this, LocationPage.class);
+                                       intent.putExtra("n1",n1);
+                                       intent.putExtra("n2",n2);
                                 startActivity(intent);
                                 //levelToggle = true;
                             //}
@@ -247,7 +251,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // add the request object to the queue to be executed
         RequestQueue rq = Volley.newRequestQueue(this);
         rq.add(req);
-    }
-    public void postToVolley(){
     }
 }

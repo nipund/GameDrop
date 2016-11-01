@@ -59,9 +59,60 @@ import java.util.Map;
  */
 public class LocationPage extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
+         double latitiutdeGet = 0;
+         double longitudeGet = 0;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location_page);
-        System.out.println("Entered locationPage");
-        Intent intent = getIntent();
+        System.out.println("Entered locationPage"+ "latitiutdeGet" + " " + longitudeGet);
+        Log.i("LocationPage", "entered locationpage " + latitiutdeGet + " " + longitudeGet);
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            latitiutdeGet = extras.getDouble("n1");
+            longitudeGet = extras.getDouble("n2");
+        }else{
+            System.out.println("Null extras");
+        }
+        System.out.println("n1: "+latitiutdeGet+" "+"n2: "+latitiutdeGet);
     }
+    public void getLocationService(){
+
+
+    }
+
+   /* public void dropGame(){
+            // final String URL = "/volley/resource/12";
+            // Post params to be sent to the server
+            System.out.println("preparing to post to volley");
+
+
+            StringRequest req = new StringRequest(Request.Method.POST, url, new Response.Listener<String>(){
+
+                @Override
+                public void onResponse(String response) {
+                    System.out.println("VolleyResponse" +response);
+                }
+            }, new Response.ErrorListener()
+            {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }){
+                @Override
+                public Map<String,String> getParams() {
+                    String keyName = "Current Location";
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    //params.put("header", "application/x-www-form-urlencoded");
+                    params.put("lat", currentLatitudeText);
+                    params.put("lng", currentLongitudeText);
+                    params.put("name", keyName);
+                    return params;
+                }
+            };
+
+            // add the request object to the queue to be executed
+            RequestQueue rq = Volley.newRequestQueue(this);
+            rq.add(req);
+        }*/
 }

@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import android.content.Intent;
@@ -53,14 +55,21 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-/**
- * Created by Avanish Chandra on 10/20/2016.
- */
+
 public class LevelEditor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.level_editor);
         System.out.println("Entered levelEditor");
-        Intent intent = getIntent();
+
+        final Button moveToMain = (Button)findViewById(R.id.moveToMapButton);
+        moveToMain.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                System.out.println("Attempting to enter main activity");
+                Intent intent = new Intent(LevelEditor.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
