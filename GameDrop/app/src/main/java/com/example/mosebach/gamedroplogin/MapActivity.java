@@ -8,6 +8,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -24,6 +30,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
@@ -32,8 +41,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private GoogleMap userMap;
     GoogleApiClient userGoogleApiClient;
     LocationRequest lRequest;
+    private String currentLatitudeText,currentLongitudeText;
+    private String url = "http://proj-309-gp-06.cs.iastate.edu/markers/create";
     private LocationManager myLocationManger;
+    private int mapToggle = 0;
     private Bundle bundle;
+    public double n1 = 0;
+    public double n2 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,23 +77,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (userMap == null) {
             MapFragment tempFrag = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
             tempFrag.getMapAsync(this);
+            mapToggle = 1;
         }
     }
 
     public void onMapReady(GoogleMap map) {
         userMap = map;
-        initialMap();
+        if(mapToggle != 1) {
+            initialMap();
+        }
     }
     public void onLocationChanged(Location location){
         if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             currentLocation = LocationServices.FusedLocationApi.getLastLocation(userGoogleApiClient);
             if(currentLocation != null){
-                double n1 = currentLocation.getLatitude();
-                double n2 = currentLocation.getLongitude();
+                currentLatitudeText = String.valueOf(currentLocation.getLatitude());
+                currentLongitudeText = String.valueOf(currentLocation.getLongitude());
+                n1 = Double.parseDouble(currentLatitudeText);
+                n2 = Double.parseDouble(currentLongitudeText);
                 tempLng = new LatLng(n1,n2);
                 userMap.clear();
                 Marker temp = userMap.addMarker(new MarkerOptions().position(tempLng).title("Current Location: " + "Lat :"+n1+" "+"Long :"+n2));
-                userMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tempLng, 17));
+                //userMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tempLng, 17));
+                sendCoordToVolley();
+                System.out.println("MapToggle: " + mapToggle);
                 System.out.println("MarkerMade");
                 System.out.println(n1 + " " + n2);
             }else{
@@ -103,10 +124,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             LocationServices.FusedLocationApi.requestLocationUpdates(userGoogleApiClient,lRequest,this);
             currentLocation = LocationServices.FusedLocationApi.getLastLocation(userGoogleApiClient);
             if(currentLocation != null){
-                double n1 = currentLocation.getLongitude();
-                double n2 = currentLocation.getLongitude();
+                currentLatitudeText = String.valueOf(currentLocation.getLatitude());
+                currentLongitudeText = String.valueOf(currentLocation.getLongitude());
+                n1 = Double.parseDouble(currentLatitudeText);
+                n2 = Double.parseDouble(currentLongitudeText);
                 tempLng = new LatLng(n1,n2);
                 Marker temp = userMap.addMarker(new MarkerOptions().position(tempLng).title("Current Location"));
+                sendCoordToVolley();
                 System.out.println("MarkerMade");
                 System.out.println(n1 + " " + n2);
             }else{
@@ -151,5 +175,41 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         lRequest.setInterval(200);
         lRequest.setFastestInterval(100);
         lRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+    public void sendCoordToVolley() {
+        // final String URL = "/volley/resource/12";
+        // Post params to be sent to the server
+        System.out.println("preparing to post to volley");
+
+
+        StringRequest req = new StringRequest(Request.Method.POST, url, new Response.Listener<String>(){
+
+            @Override
+            public void onResponse(String response) {
+                System.out.println("VolleyResponse" +response);
+            }
+        }, new Response.ErrorListener()
+        {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            public Map<String,String> getParams() {
+                String keyName = "Current Location";
+                HashMap<String, String> params = new HashMap<String, String>();
+                //params.put("header", "application/x-www-form-urlencoded");
+                params.put("lat", currentLatitudeText);
+                params.put("lng", currentLongitudeText);
+                params.put("name", keyName);
+                return params;
+            }
+        };
+
+        // add the request object to the queue to be executed
+        RequestQueue rq = Volley.newRequestQueue(this);
+        rq.add(req);
     }
 }
