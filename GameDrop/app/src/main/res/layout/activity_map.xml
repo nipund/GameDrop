@@ -24,6 +24,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-
+        <Button
+            android:id="@+id/LevelEditorButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/levelEditor"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:onClick="onClick" />
 
 </RelativeLayout>

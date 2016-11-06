@@ -1,11 +1,14 @@
 package com.example.mosebach.gamedroplogin;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -71,6 +74,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .addOnConnectionFailedListener(this)
                 .build();
         onStart();
+        final Button moveToLocation = (Button)findViewById(R.id.LevelEditorButton);
+        moveToLocation.setText("level Editor");
+        moveToLocation.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                //if(levelToggle == false) {
+                Intent intent = new Intent(MapActivity.this, EditorActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initialMap() {
