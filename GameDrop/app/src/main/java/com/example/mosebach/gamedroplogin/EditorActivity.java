@@ -78,7 +78,7 @@ public class EditorActivity extends AppCompatActivity {
                 int position = data.getIntExtra("position", -1);
                 int id = (int) data.getLongExtra("drawable_id", -1);
                 Drawable d = ContextCompat.getDrawable(getApplicationContext(), id);
-                tv.elements.add(new GameElement(d, id, 100, 100, 100, 100, "Test"));
+                tv.elements.add(new GameElement(id, 100, 100, 100, 100, "Test"));
                 tv.selectLastElement();
                 tv.invalidate();
             }
