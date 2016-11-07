@@ -45,6 +45,9 @@ public class GameEngine extends Activity {
     // A thread and can override the run method.
     class GameView extends SurfaceView implements Runnable {
 
+        //TEST VALUE
+        float touchLocation = 0;
+
         // This is our thread
         Thread gameThread = null;
 
@@ -68,16 +71,18 @@ public class GameEngine extends Activity {
         private long timeThisFrame;
 
         // Declare an object of type Bitmap
-        Bitmap bitmapBob;
+        Bitmap bitmapSprite;
 
         // Bob starts off not moving
-        boolean isMoving = false;
+        boolean isMovingRight = false;
+
+        float xVel = 0.0
 
         // He can walk at 150 pixels per second
         float walkSpeedPerSecond = 150;
 
         // He starts 10 pixels from the left
-        float bobXPosition = 10;
+        float spriteXPos = 10;
 
         // When the we initialize (call new()) on gameView
         // This special constructor method runs
@@ -92,7 +97,7 @@ public class GameEngine extends Activity {
             paint = new Paint();
 
             // Load Bob from his .png file
-            bitmapBob = BitmapFactory.decodeResource(this.getResources(), R.drawable.duck);
+            bitmapSprite = BitmapFactory.decodeResource(this.getResources(), R.drawable.duck);
 
             // Set our boolean to true - game on!
             playing = true;
@@ -132,7 +137,7 @@ public class GameEngine extends Activity {
             // If bob is moving (the player is touching the screen)
             // then move him to the right based on his target speed and the current fps.
             if(isMoving){
-                bobXPosition = bobXPosition + (walkSpeedPerSecond / fps);
+                spriteXPos = spriteXPos + (walkSpeedPerSecond / fps);
             }
 
         }
@@ -155,10 +160,10 @@ public class GameEngine extends Activity {
                 paint.setTextSize(45);
 
                 // Display the current fps on the screen
-                canvas.drawText("FPS:" + fps, 20, 40, paint);
+                canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation, 20, 40, paint);
 
                 // Draw bob at bobXPosition, 200 pixels
-                canvas.drawBitmap(bitmapBob, bobXPosition, 200, paint);
+                canvas.drawBitmap(bitmapSprite, spriteXPos, 200, paint);
 
                 // Draw everything to the screen
                 ourHolder.unlockCanvasAndPost(canvas);
@@ -193,8 +198,11 @@ public class GameEngine extends Activity {
 
             switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
 
+
                 // Player has touched the screen
                 case MotionEvent.ACTION_DOWN:
+
+                    touchLocation = motionEvent.getX();
 
                     // Set isMoving so Bob is moved in the update method
                     isMoving = true;
