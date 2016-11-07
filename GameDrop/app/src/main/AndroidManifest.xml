@@ -42,6 +42,11 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".ElementSelectorActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".GameEngine"
+            android:exported="true"
+            android:screenOrientation="landscape"></activity>
+
     </application>
 
 </manifest>
