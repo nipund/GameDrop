@@ -17,7 +17,7 @@ public class GameElement {
     //tied to another element?do elements keep score or level?
 
     // Set construct
-    public GameElement(Drawable pic, int pic_id, int x, int y, int width, int height, String name){
+    public GameElement(int pic_id, int x, int y, int width, int height, String name){
         this.pic = pic;
         this.pic_id = pic_id;
         this.x = x;

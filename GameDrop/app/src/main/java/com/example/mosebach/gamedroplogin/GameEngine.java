@@ -2,6 +2,7 @@ package com.example.mosebach.gamedroplogin;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -62,12 +63,18 @@ public class GameEngine extends Activity {
         // when the game is running- or not.
         volatile boolean playing;
 
+        //Level to be loaded from server and run
+        Level level;
+
+        //Static Server URL Begining
+        String url = "http://proj-309-gp-06.cs.iastate.edu/markers/within/";
+
         // A Canvas and a Paint object
         Canvas canvas;
         Paint paint;
 
         // This variable tracks the game frame rate
-        long fps;
+        int fps;
 
         // This is used to help calculate the fps
         private long timeThisFrame;
@@ -76,6 +83,8 @@ public class GameEngine extends Activity {
         Bitmap bitmapSprite;
 
         GameElement sprite;
+
+        int levelId;
 
         // Bob starts off not moving
         boolean isMovingRight = false;
@@ -98,9 +107,15 @@ public class GameEngine extends Activity {
             ourHolder = getHolder();
             paint = new Paint();
 
-            Drawable duck = (Drawable) getResources().getDrawable(R.drawable.duck, null);
+            Intent i = getIntent();
 
-            sprite = new GameElement(duck, R.drawable.duck, 0, 100, getDrawable(R.drawable.duck).getBounds().width(), getDrawable(R.drawable.duck).getBounds().height(), "duck");
+            levelId = i.getIntExtra("levelId", 0);
+
+            level = getLevel(levelId);
+
+
+
+            sprite = new GameElement(R.drawable.duck, 0, 100, getDrawable(R.drawable.duck).getBounds().width(), getDrawable(R.drawable.duck).getBounds().height(), "duck");
             // Load Bob from his .png file
             bitmapSprite = BitmapFactory.decodeResource(this.getResources(), R.drawable.duck);
 
@@ -127,7 +142,7 @@ public class GameEngine extends Activity {
                 // time animations and more.
                 timeThisFrame = System.currentTimeMillis() - startFrameTime;
                 if (timeThisFrame > 0) {
-                    fps = 1000 / timeThisFrame;
+                    fps = (int) ((int) 1000 / timeThisFrame);
                 }
 
             }
@@ -204,16 +219,33 @@ public class GameEngine extends Activity {
 
             switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
 
+                //JUMP
+                case MotionEvent.ACTION_POINTER_DOWN:
 
-                // Player has touched the screen
+                    sprite.setDx(0);
+
+                    break;
+
+                case MotionEvent.ACTION_POINTER_UP:
+
+                    touchLocation = motionEvent.getX();
+
+                    if(touchLocation > 950){
+                        sprite.setDx( walkSpeedPerSecond / fps);
+                    }else{
+                        sprite.setDx( -walkSpeedPerSecond / fps );
+                    }
+
+                    break;
+                    // Player has touched the screen
                 case MotionEvent.ACTION_DOWN:
 
                     touchLocation = motionEvent.getX();
 
                     if(touchLocation > 950){
-                        sprite.setDx(walkSpeedPerSecond);
+                        sprite.setDx( walkSpeedPerSecond / fps);
                     }else{
-                        sprite.setDx(-walkSpeedPerSecond);
+                        sprite.setDx( -walkSpeedPerSecond / fps );
                     }
 
                     break;
@@ -226,6 +258,16 @@ public class GameEngine extends Activity {
                     break;
             }
             return true;
+        }
+
+        public Level getLevel(int levelId){
+
+            //"http://proj-309-gp-06.cs.iastate.edu/users/login/" + userName.getText() + "/" + password.getText();
+            //pat test     http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test
+            //String URL = "http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test";
+            //final String getMarkerArray = url + latititudeGet + "//" + longitudeGet + "//" + "2000";
+
+            final String levelURL = url + levelId;
         }
 
     }
@@ -250,5 +292,7 @@ public class GameEngine extends Activity {
         // Tell the gameView pause method to execute
         gameView.pause();
     }
+
+
 
 }
