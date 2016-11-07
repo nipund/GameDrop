@@ -112,6 +112,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 userMap.clear();
                 Marker temp = userMap.addMarker(new MarkerOptions().position(tempLng).title("Current Location: " + "Lat :"+n1+" "+"Long :"+n2));
                 //userMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tempLng, 17));
+                userMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        if(marker.getTitle() != null){
+                            //if(markerToggle == false) {
+                            Intent intent = new Intent(MapActivity.this, LocationPage.class);
+                            intent.putExtra("n1",n1);
+                            intent.putExtra("n2",n2);
+                            System.out.println("Attempting to go to location page");
+                            startActivity(intent);
+                            //levelToggle = true;
+                            //}
+                        }
+                        return true;
+                    }
+                });
                 sendCoordToVolley();
                 System.out.println("MapToggle: " + mapToggle);
                 System.out.println("MarkerMade");
