@@ -3,12 +3,13 @@ package com.example.mosebach.gamedroplogin;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 public class EditorActivity extends AppCompatActivity {
 
@@ -39,6 +40,12 @@ public class EditorActivity extends AppCompatActivity {
                 tv.nextElement();
                 tv.invalidate();
                 return true;
+            case R.id.saveLevel:
+                Gson gson = new Gson();
+                //Type aryType = new TypeToken<GameElement>(){}.getType();
+                String json = gson.toJson(tv.elements);
+                System.out.println(json);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -51,7 +58,7 @@ public class EditorActivity extends AppCompatActivity {
                 int position = data.getIntExtra("position", -1);
                 int id = (int) data.getLongExtra("drawable_id", -1);
                 Drawable d = ContextCompat.getDrawable(getApplicationContext(), id);
-                tv.elements.add(new GameElement(d, 100, 100, 100, 100, "Test"));
+                tv.elements.add(new GameElement(d, id, 100, 100, 100, 100, "Test"));
                 tv.selectLastElement();
                 tv.invalidate();
             }

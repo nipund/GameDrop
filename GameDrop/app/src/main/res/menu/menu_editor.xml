@@ -10,4 +10,7 @@
         app:showAsAction="always"
         android:icon="@android:drawable/ic_input_add"
         android:id="@+id/add_new_element" />
+    <item android:title="Save Level"
+        android:id="@+id/saveLevel"
+         />
 </menu>
