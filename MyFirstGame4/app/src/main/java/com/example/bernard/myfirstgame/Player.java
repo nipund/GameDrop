@@ -17,10 +17,16 @@ public class Player extends GameObject{
     private Animation animation  = new Animation() ;
     private long startTime;
 
-    public Player(Bitmap res, int w ,int h, int numFrames){
+    //TO BE CHANGED ACCORDING TO GAME EDITOR
+    int startY= GamePanel.HEIGHT/2;
+    int startX= 100;
 
-        x=100;
-        y=GamePanel.HEIGHT/2;
+
+    public Player(Bitmap res, int w ,int h, int numFrames){
+        //sets position of player
+
+        x=startX;
+        y=startY;
         dy=0 ;
         score= 0;
         height = h;

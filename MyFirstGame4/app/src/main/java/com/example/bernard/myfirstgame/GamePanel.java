@@ -34,6 +34,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private ArrayList<BotBorder> bottomborder;
     private Random rand = new Random();
     private int sprite;
+    private int PlayerHeight;
+    private int PlayerWidth;
     private int maxBorderHeight;
     private int minBorderHeight;
     private boolean topDown = true;
@@ -47,6 +49,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private boolean dissapear;
     private boolean started;
     private int best;
+    private int startY;
+
+
 
     public GamePanel(Context context, int pic) {
         super(context);
@@ -57,6 +62,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         //make Game Panel so it can handle events
         setFocusable(true);
         sprite = pic;
+        //TO BE CHANGED ACCORDING TO SPRITE USED
+        PlayerHeight = 65 ;
+        PlayerWidth = 25;
+        startY = GamePanel.HEIGHT/2;
     }
 
     @Override
@@ -86,7 +95,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         //draw
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.grassbg1));
-        player = new Player(BitmapFactory.decodeResource(getResources(), sprite), 65, 25, 1);
+        player = new Player(BitmapFactory.decodeResource(getResources(), sprite),PlayerHeight,PlayerWidth, 1);
         smoke = new ArrayList<Smokepuff>();
         missiles = new ArrayList<Missile>();
         topborder = new ArrayList<TopBorder>();
@@ -350,6 +359,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
     } public void newGame()
     {
+        
         dissapear = false;
         bottomborder.clear();
         topborder.clear();
@@ -361,7 +371,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         player.resetDY();
         player.resetScore();
-        player.setY(HEIGHT/2);
+        //resets starting position of Player
+        player.setY(startY/2);
         if(player.getScore()>best){
             best = player.getScore();
         }
