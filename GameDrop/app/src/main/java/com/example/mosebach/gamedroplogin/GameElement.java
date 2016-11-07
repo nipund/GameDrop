@@ -11,6 +11,7 @@ public class GameElement {
     transient Drawable pic;
     int pic_id;
     int x, y;
+    int dx, dy;
     int width, height;
     String name;
     //tied to another element?do elements keep score or level?
@@ -21,6 +22,8 @@ public class GameElement {
         this.pic_id = pic_id;
         this.x = x;
         this.y = y;
+        this.dx = 0;
+        this.dy = 0;
         this.width = width;
         this.height = height;
         this.name = name;
@@ -50,7 +53,23 @@ public class GameElement {
         this.x = x;
     }
 
-    public void move(int dx, int dy) {
+    public int getDy() {
+        return dy;
+    }
+
+    public void setDy(int dy) {
+        this.dy = dy;
+    }
+
+    public int getDx() {
+        return dx;
+    }
+
+    public void setDx(int dx) {
+        this.dx = dx;
+    }
+
+    public void move() {
         this.x += dx;
         this.y += dy;
     }

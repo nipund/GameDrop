@@ -2,10 +2,12 @@ package com.example.mosebach.gamedroplogin;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.graphics.Color;
@@ -73,16 +75,16 @@ public class GameEngine extends Activity {
         // Declare an object of type Bitmap
         Bitmap bitmapSprite;
 
+        GameElement sprite;
+
         // Bob starts off not moving
         boolean isMovingRight = false;
 
-        float xVel = 0.0
-
         // He can walk at 150 pixels per second
-        float walkSpeedPerSecond = 150;
+        int walkSpeedPerSecond = 150;
 
         // He starts 10 pixels from the left
-        float spriteXPos = 10;
+        int spriteXPos = 10;
 
         // When the we initialize (call new()) on gameView
         // This special constructor method runs
@@ -96,6 +98,9 @@ public class GameEngine extends Activity {
             ourHolder = getHolder();
             paint = new Paint();
 
+            Drawable duck = (Drawable) getResources().getDrawable(R.drawable.duck, null);
+
+            sprite = new GameElement(duck, R.drawable.duck, 0, 100, getDrawable(R.drawable.duck).getBounds().width(), getDrawable(R.drawable.duck).getBounds().height(), "duck");
             // Load Bob from his .png file
             bitmapSprite = BitmapFactory.decodeResource(this.getResources(), R.drawable.duck);
 
@@ -134,11 +139,12 @@ public class GameEngine extends Activity {
         // We will also do other things like collision detection.
         public void update() {
 
+            sprite.move();
             // If bob is moving (the player is touching the screen)
             // then move him to the right based on his target speed and the current fps.
-            if(isMoving){
+            /*if(isMoving){
                 spriteXPos = spriteXPos + (walkSpeedPerSecond / fps);
-            }
+            }*/
 
         }
 
@@ -163,7 +169,7 @@ public class GameEngine extends Activity {
                 canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation, 20, 40, paint);
 
                 // Draw bob at bobXPosition, 200 pixels
-                canvas.drawBitmap(bitmapSprite, spriteXPos, 200, paint);
+                canvas.drawBitmap(bitmapSprite, sprite.getX(), 200, paint);
 
                 // Draw everything to the screen
                 ourHolder.unlockCanvasAndPost(canvas);
@@ -204,16 +210,18 @@ public class GameEngine extends Activity {
 
                     touchLocation = motionEvent.getX();
 
-                    // Set isMoving so Bob is moved in the update method
-                    isMoving = true;
+                    if(touchLocation > 950){
+                        sprite.setDx(walkSpeedPerSecond);
+                    }else{
+                        sprite.setDx(-walkSpeedPerSecond);
+                    }
 
                     break;
 
                 // Player has removed finger from screen
                 case MotionEvent.ACTION_UP:
 
-                    // Set isMoving so Bob does not move
-                    isMoving = false;
+                    sprite.setDx(0);
 
                     break;
             }
