@@ -1,3 +1,5 @@
+
+
 package com.example.mosebach.gamedroplogin;
 
 import android.graphics.drawable.Drawable;
@@ -10,7 +12,9 @@ public class GameElement {
 
     transient Drawable pic;
     int x, y, pic_id;
-    int dx, dy;
+    int dx;
+    int dy;
+    int grav;
     int width, height;
     String name;
 
@@ -24,6 +28,7 @@ public class GameElement {
         this.y = y;
         this.dx = 0;
         this.dy = 0;
+        this.grav = 0;
         this.width = width;
         this.height = height;
         this.name = name;
@@ -74,9 +79,19 @@ public class GameElement {
 
     public int right(){return this.x + this.width;}
 
+    public void setRight(int x){this.x = x - this.width;}
+
     public int left(){return this.x;}
 
+    public void setLeft(int x){ this.x = x;}
+
     public int top(){return this.y + this.height;}
+
+    public void setTop(int y) {this.y = y - this.height;}
+
+    public int bottom(){return this.y;}
+
+    public void setBottom(int y){this.y = y;}
 
     public boolean isSprite() {
         return isSprite;
@@ -86,13 +101,31 @@ public class GameElement {
         isSprite = sprite;
     }
 
+    public void setGrav(int grav) {
+        this.grav = grav;
+    }
 
 
-    public int bottom(){return this.y;}
+
+
 
     public void move() {
-        this.x += dx;
+
+        this.dy += grav;
+            if(this.y < 10 || this.y > 1200){
+                if(this.y < 10){
+                    this.y = 10;
+                }else if(this.y > 1200){
+                    this.y = 1200;
+                }
+                grav = 0;
+                this.dy = 0;
+            }
+
         this.y += dy;
+
+
+        this.x += dx;
     }
 
     public void move(float dx, float dy) {
@@ -109,3 +142,5 @@ public class GameElement {
     }
 
 }
+
+

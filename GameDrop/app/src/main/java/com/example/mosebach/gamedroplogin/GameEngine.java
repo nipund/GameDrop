@@ -1,3 +1,5 @@
+
+
 package com.example.mosebach.gamedroplogin;
 
 import android.app.Activity;
@@ -111,6 +113,8 @@ public class GameEngine extends Activity {
         // Bob starts off not moving
         boolean isMovingRight = false;
 
+        boolean collision = false;
+
         // He can walk at 150 pixels per second
         int walkSpeedPerSecond = 150;
 
@@ -137,6 +141,7 @@ public class GameEngine extends Activity {
 
             sprite = getSprite();
 
+
             // Set our boolean to true - game on!
             playing = true;
 
@@ -162,6 +167,9 @@ public class GameEngine extends Activity {
                 if (timeThisFrame > 0) {
                     fps = (int) ((int) 1000 / timeThisFrame);
                 }
+                if(fps > 20 && fps < 100) {
+                    sprite.setGrav(walkSpeedPerSecond / fps / 2);
+                }
 
             }
 
@@ -173,6 +181,8 @@ public class GameEngine extends Activity {
         public void update() {
 
             sprite.move();
+
+            collision = checkHitboxes();
             // If bob is moving (the player is touching the screen)
             // then move him to the right based on his target speed and the current fps.
             /*if(isMoving){
@@ -199,13 +209,11 @@ public class GameEngine extends Activity {
                 paint.setTextSize(45);
 
                 // Display the current fps on the screen
-                canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation, 20, 40, paint);
+                canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation + "\nX:" + sprite.getX() + "\nY:" + sprite.getY() + "\nCollision:" + collision, 20, 40, paint);
 
                 checkHitboxes();
 
                 drawElements(level.elements);
-
-                //canvas.drawBitmap(bitmapSprite, sprite.getX(), 200, paint);
 
                 // Draw everything to the screen
                 ourHolder.unlockCanvasAndPost(canvas);
@@ -244,6 +252,7 @@ public class GameEngine extends Activity {
                 case MotionEvent.ACTION_POINTER_DOWN:
 
                     sprite.setDx(0);
+                    sprite.setDy(-30);
 
                     break;
 
@@ -253,20 +262,24 @@ public class GameEngine extends Activity {
 
                     if(touchLocation > 950){
                         sprite.setDx( walkSpeedPerSecond / fps);
+                        //sprite.setGrav(walkSpeedPerSecond / fps / 2);
                     }else{
                         sprite.setDx( -walkSpeedPerSecond / fps );
+                        //sprite.setGrav(-walkSpeedPerSecond / fps / 2);
                     }
 
                     break;
-                    // Player has touched the screen
+                // Player has touched the screen
                 case MotionEvent.ACTION_DOWN:
 
                     touchLocation = motionEvent.getX();
 
                     if(touchLocation > 950){
                         sprite.setDx( walkSpeedPerSecond / fps);
+                        //sprite.setGrav(walkSpeedPerSecond / fps / 2);
                     }else{
                         sprite.setDx( -walkSpeedPerSecond / fps );
+                        //sprite.setGrav(-walkSpeedPerSecond / fps / 2);
                     }
 
                     break;
@@ -275,6 +288,7 @@ public class GameEngine extends Activity {
                 case MotionEvent.ACTION_UP:
 
                     sprite.setDx(0);
+                    //sprite.setGrav(0);
 
                     break;
             }
@@ -303,7 +317,7 @@ public class GameEngine extends Activity {
                     return level.elements.get(i);
                 }
             }
-           return null;
+            return null;
         }
 
         public void drawElements(ArrayList<GameElement> elements){
@@ -318,9 +332,24 @@ public class GameEngine extends Activity {
             }
         }
 
-        public void checkHitboxes(){
+        public boolean checkHitboxes(){
 
-            return;
+            //check every element with sprite
+            for(int i = 0; i < level.elements.size(); i++){
+
+                //dont check the sprite to itself
+                if(level.elements.get(i).isSprite != true){
+                    GameElement ge = level.elements.get(i);
+
+                    if(sprite.left() < ge.right() &&
+                            sprite.right() > ge.left() &&
+                            sprite.bottom() < ge.top() &&
+                            sprite.top() > ge.bottom()){
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
     }
@@ -349,3 +378,4 @@ public class GameEngine extends Activity {
 
 
 }
+
