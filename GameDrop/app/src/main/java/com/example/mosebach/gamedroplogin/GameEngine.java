@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
+import android.support.v4.content.ContextCompat;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.graphics.Color;
@@ -135,8 +136,6 @@ public class GameEngine extends Activity {
             level = deserialize(serializedLevelString);
 
             sprite = getSprite();
-            // Load Bob from his .png file
-            bitmapSprite = BitmapFactory.decodeResource(this.getResources(), R.drawable.basketball);
 
             // Set our boolean to true - game on!
             playing = true;
@@ -205,8 +204,6 @@ public class GameEngine extends Activity {
                 checkHitboxes();
 
                 drawElements(level.elements);
-
-                Drawable d = sprite.pic;
 
                 //canvas.drawBitmap(bitmapSprite, sprite.getX(), 200, paint);
 
@@ -293,7 +290,10 @@ public class GameEngine extends Activity {
             System.out.println(youClassList.get(1));
 
             level = new Level(youClassList, null, null, null);
-
+            for(GameElement ge : level.elements) {
+                Drawable d = ContextCompat.getDrawable(getApplicationContext(), ElementStore.elements[ge.pic_id]);
+                ge.setPic(d);
+            }
             return level;
         }
 
@@ -306,61 +306,16 @@ public class GameEngine extends Activity {
            return null;
         }
 
-        public Level getLevel(int levelId){
-
-            //"http://proj-309-gp-06.cs.iastate.edu/users/login/" + userName.getText() + "/" + password.getText();
-            //pat test     http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test
-            //String URL = "http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test";
-            //final String getMarkerArray = url + latititudeGet + "//" + longitudeGet + "//" + "2000";
-
-            final String levelURL = url + levelId;
-
-            JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, levelURL, null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                VolleyLog.v("Response:%n %s", response.toString(4));
-                                if(response.getBoolean("success")){
-                                    String levelArray  = response.getString("level");
-
-                                    Type listType = new TypeToken<ArrayList<GameElement>>(){}.getType();
-
-                                    ArrayList<GameElement> youClassList = new Gson().fromJson(levelArray, listType);
-
-                                    System.out.println(youClassList.get(1));
-
-                                    level = new Level(youClassList, null, null, null);
-
-                                }else{
-                                    System.out.println("Access to markers failed");
-                                }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.e("Error: ", error.getMessage());
-                }
-            });
-
-            RequestQueue requestQueue = Volley.newRequestQueue(GameEngine.this);
-            requestQueue.add(req);
-            SystemClock.sleep(1000);
-
-            return level;
-        }
-
         public void drawElements(ArrayList<GameElement> elements){
 
-            /*for(int i = 0; i < elements.size(); i++){
-                canvas.drawBitmap(bitmapSprite, sprite.getX(), 200, paint);
+            for(int i = 0; i < elements.size(); i++){
+                GameElement ge = elements.get(i);
+                Drawable d = ge.pic;
+                d.setBounds(ge.x, ge.y, ge.getRight(), ge.getBottom());
+                d.setAlpha(255);
+                d.draw(canvas);
 
             }
-            canvas.drawBitmap(bitmapSprite, sprite.getX(), 200, paint);*/
         }
 
         public void checkHitboxes(){
