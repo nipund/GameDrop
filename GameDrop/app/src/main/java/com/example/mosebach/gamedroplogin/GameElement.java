@@ -14,11 +14,11 @@ public class GameElement {
     int dx, dy;
     int width, height;
     String name;
+    boolean isSprite;
     //tied to another element?do elements keep score or level?
 
     // Set construct
-    public GameElement(int pic_id, int x, int y, int width, int height, String name){
-        this.pic = pic;
+    public GameElement(Drawable pic, int x, int y, int width, int height, String name){
         this.pic_id = pic_id;
         this.x = x;
         this.y = y;
@@ -68,6 +68,18 @@ public class GameElement {
     public void setDx(int dx) {
         this.dx = dx;
     }
+
+    public int right(){return this.x + this.width;}
+
+    public int left(){return this.x;}
+
+    public int top(){return this.y + this.height;}
+
+    //Type listType = new TypeTokeen<ArrayList<YourClass>>(){}.getType();
+
+    //List<YourClass> youClassList = new Gson().fromJson(jsonArray, listType);
+
+    public int bottom(){return this.y;}
 
     public void move() {
         this.x += dx;

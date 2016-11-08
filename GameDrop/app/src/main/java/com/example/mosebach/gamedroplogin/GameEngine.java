@@ -16,6 +16,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 /**
  * Created by mosebach on 11/6/2016.
  */
@@ -115,9 +132,11 @@ public class GameEngine extends Activity {
 
 
 
-            sprite = new GameElement(R.drawable.duck, 0, 100, getDrawable(R.drawable.duck).getBounds().width(), getDrawable(R.drawable.duck).getBounds().height(), "duck");
+            sprite = new GameElement(R.drawable.basketball, 0, 100, 100, 100, "basketball");
             // Load Bob from his .png file
-            bitmapSprite = BitmapFactory.decodeResource(this.getResources(), R.drawable.duck);
+            bitmapSprite = BitmapFactory.decodeResource(this.getResources(), R.drawable.basketball);
+            bitmapSprite.setHeight(100);
+            bitmapSprite.setWidth(100);
 
             // Set our boolean to true - game on!
             playing = true;
@@ -183,8 +202,13 @@ public class GameEngine extends Activity {
                 // Display the current fps on the screen
                 canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation, 20, 40, paint);
 
-                // Draw bob at bobXPosition, 200 pixels
-                canvas.drawBitmap(bitmapSprite, sprite.getX(), 200, paint);
+                checkHitboxes();
+
+                drawElements(level.elements);
+
+                Drawable d = sprite.pic;
+
+                //canvas.drawBitmap(bitmapSprite, sprite.getX(), 200, paint);
 
                 // Draw everything to the screen
                 ourHolder.unlockCanvasAndPost(canvas);
@@ -268,6 +292,49 @@ public class GameEngine extends Activity {
             //final String getMarkerArray = url + latititudeGet + "//" + longitudeGet + "//" + "2000";
 
             final String levelURL = url + levelId;
+
+            JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, levelURL, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                VolleyLog.v("Response:%n %s", response.toString(4));
+                                if(response.getBoolean("success")){
+                                    JSONArray markerArray  = response.getJSONArray("markers");
+
+                                }else{
+                                    System.out.println("Access to markers failed");
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.e("Error: ", error.getMessage());
+                }
+            });
+
+            RequestQueue requestQueue = Volley.newRequestQueue(GameEngine.this);
+            requestQueue.add(req);
+
+
+            return new Level();
+        }
+
+        public void drawElements(ArrayList<GameElement> elements){
+
+            /*for(int i = 0; i < elements.size(); i++){
+                canvas.drawBitmap(bitmapSprite, sprite.getX(), 200, paint);
+
+            }
+            canvas.drawBitmap(bitmapSprite, sprite.getX(), 200, paint);*/
+        }
+
+        public void checkHitboxes(){
+
         }
 
     }
