@@ -79,6 +79,17 @@ public class TileView extends View {
         }
     }
 
+    public void setToSprite() {
+        for(int i = 0; i < elements.size(); i++) {
+            GameElement el = elements.get(i);
+            if(i == selected) {
+                el.setSprite(true);
+            } else {
+                el.setSprite(false);
+            }
+        }
+    }
+
     public void selectLastElement() {
         selected = elements.size() - 1;
     }
