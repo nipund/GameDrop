@@ -47,7 +47,8 @@ public class ElementAdapter extends BaseAdapter {
     }
 
     private static Integer[] mThumbIds = {
-            R.drawable.sample_element_1,
-            R.drawable.basketball
+            ElementStore.elements[0],
+            ElementStore.elements[1],
+            ElementStore.elements[2]
     };
 }
