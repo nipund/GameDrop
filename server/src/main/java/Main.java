@@ -32,6 +32,8 @@ public class Main {
 				(req, resp) -> MarkerController.create(req.body()));
 		post("/levels/create",
 				(req, resp) -> LevelController.create(req.body()));
+		get("/levels/get/:id",
+				(req, resp) -> LevelController.get(req.params(":id")));
 
 		exception(SQLException.class, (ex, req, resp) -> {
 			JSONObject obj = new JSONObject();
