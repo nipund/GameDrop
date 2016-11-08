@@ -9,15 +9,16 @@ import android.graphics.drawable.Drawable;
 public class GameElement {
 
     transient Drawable pic;
-    int x, y;
+    int x, y, pic_id;
     int dx, dy;
     int width, height;
     String name;
+    boolean isSprite;
     //tied to another element?do elements keep score or level?
 
     // Set construct
-    public GameElement(Drawable d, int x, int y, int width, int height, String name){
-        this.pic = d;
+    public GameElement(int pic_id, int x, int y, int width, int height, String name){
+        this.pic_id = pic_id;
         this.x = x;
         this.y = y;
         this.dx = 0;
@@ -26,6 +27,8 @@ public class GameElement {
         this.height = height;
         this.name = name;
     }
+
+    public void setPic(Drawable pic) {this.pic = pic;}
 
     public int getRight() {
         return x + width;
@@ -66,6 +69,16 @@ public class GameElement {
     public void setDx(int dx) {
         this.dx = dx;
     }
+
+    public int right(){return this.x + this.width;}
+
+    public int left(){return this.x;}
+
+    public int top(){return this.y + this.height;}
+
+
+
+    public int bottom(){return this.y;}
 
     public void move() {
         this.x += dx;
