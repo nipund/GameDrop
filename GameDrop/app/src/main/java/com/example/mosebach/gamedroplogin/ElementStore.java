@@ -1,4 +1,4 @@
-import com.example.mosebach.gamedroplogin.R;
+package com.example.mosebach.gamedroplogin;
 
 /**
  * Created by Nipun on 11/7/2016.
