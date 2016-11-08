@@ -30,6 +30,8 @@ public class Main {
 				(req, resp) -> MarkerController.within(req.params(":lat"), req.params(":lng"), req.params(":distance")));
 		post("/markers/create",
 				(req, resp) -> MarkerController.create(req.body()));
+		post("/levels/create",
+				(req, resp) -> LevelController.create(req.body()));
 
 		exception(SQLException.class, (ex, req, resp) -> {
 			JSONObject obj = new JSONObject();
