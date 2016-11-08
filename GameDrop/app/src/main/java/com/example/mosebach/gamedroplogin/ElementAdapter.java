@@ -49,6 +49,12 @@ public class ElementAdapter extends BaseAdapter {
     private static Integer[] mThumbIds = {
             ElementStore.elements[0],
             ElementStore.elements[1],
-            ElementStore.elements[2]
+            ElementStore.elements[2],
+            ElementStore.elements[3],
+            ElementStore.elements[4],
+            ElementStore.elements[5],
+
+
+
     };
 }
