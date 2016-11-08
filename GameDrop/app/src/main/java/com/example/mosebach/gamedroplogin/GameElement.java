@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 public class GameElement {
 
     transient Drawable pic;
-    int pic_id;
     int x, y;
     int dx, dy;
     int width, height;

@@ -25,6 +25,7 @@ public class MarkerController {
 		obj.put("success", true);
 		while(rs.next()) {
 			JSONObject innerObj = new JSONObject();
+			innerObj.put("id", rs.getInt("id"));
 			innerObj.put("name", rs.getString("name"));
 			innerObj.put("lat", rs.getFloat("lat"));
 			innerObj.put("lng", rs.getFloat("lng"));
