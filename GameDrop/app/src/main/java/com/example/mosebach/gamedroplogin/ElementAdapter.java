@@ -52,6 +52,11 @@ public class ElementAdapter extends BaseAdapter {
             ElementStore.elements[2],
             ElementStore.elements[3],
             ElementStore.elements[4]
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> f472fe5028408da684f9cad170af803a3720dee1
 
     };
 }
