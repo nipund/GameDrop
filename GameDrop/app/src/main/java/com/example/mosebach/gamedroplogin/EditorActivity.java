@@ -66,6 +66,9 @@ public class EditorActivity extends AppCompatActivity {
                 sendObjectToVolley();
                 System.out.println(json);
                 return true;
+            case R.id.setSprite:
+                tv.setToSprite();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
