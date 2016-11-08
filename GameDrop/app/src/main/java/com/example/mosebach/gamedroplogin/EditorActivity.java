@@ -112,6 +112,7 @@ public class EditorActivity extends AppCompatActivity {
                 params.put("lat", Double.toString(latititudeGet));
                 params.put("lng", Double.toString(longitudeGet));
                 params.put("Level", json);
+                System.out.println(url + latititudeGet + " " + longitudeGet);
                 return params;
             }
         };
