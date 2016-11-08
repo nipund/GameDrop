@@ -128,10 +128,22 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
                                     double tempLat = object.getDouble("lat");
                                     double tempLng = object.getDouble("lng");
                                     String name = object.getString("name");
-                                    String ID = object.getString("id");
+                                    final String ID = object.getString("id");
                                     System.out.println("Lat " + tempLat + " Lng "+ tempLng + " Name " + name + " id" + ID);
                                     LatLng tempCoord = new LatLng(tempLat,tempLng);
                                     Marker temp = userMap.addMarker(new MarkerOptions().position(tempCoord).title(name + " Lat :"+tempLat+" "+"Long :"+tempLng +" ID:" + ID));
+                                    userMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                        @Override
+                                        public boolean onMarkerClick(Marker marker) {
+                                            if(marker.getTitle() != null){
+                                                Intent intent = new Intent(LocationPage.this, GameEngine.class);
+                                                intent.putExtra("levelId",Integer.parseInt(ID));
+                                                System.out.println("Attempting to start GameEngine");
+                                                startActivity(intent);
+                                            }
+                                            return true;
+                                        }
+                                    });
                                 }
                                 System.out.println(getMarkerArray);
                             }else{
