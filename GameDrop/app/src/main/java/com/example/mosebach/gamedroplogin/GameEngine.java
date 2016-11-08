@@ -138,8 +138,6 @@ public class GameEngine extends Activity {
             sprite = new GameElement(R.drawable.basketball, 0, 100, 100, 100, "basketball");
             // Load Bob from his .png file
             bitmapSprite = BitmapFactory.decodeResource(this.getResources(), R.drawable.basketball);
-            bitmapSprite.setHeight(100);
-            bitmapSprite.setWidth(100);
 
             // Set our boolean to true - game on!
             playing = true;
