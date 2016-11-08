@@ -25,7 +25,7 @@ public class EditorActivity extends AppCompatActivity {
     private TileView tv;
     double latititudeGet = 0;
     double longitudeGet = 0;
-    String url = "http://requestb.in/u252eru2";
+    String url = "http://proj-309-gp-06.cs.iastate.edu/levels/create";
     private String json;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +77,8 @@ public class EditorActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 int position = data.getIntExtra("position", -1);
                 int id = (int) data.getLongExtra("drawable_id", -1);
-                Drawable d = ContextCompat.getDrawable(getApplicationContext(), id);
-                tv.elements.add(new GameElement(id, 100, 100, 100, 100, "Test"));
+                Drawable d = ContextCompat.getDrawable(getApplicationContext(), ElementStore.elements[position]);
+                tv.elements.add(new GameElement(d, 100, 100, 100, 100, "Test"));
                 tv.selectLastElement();
                 tv.invalidate();
             }

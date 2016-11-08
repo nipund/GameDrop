@@ -115,7 +115,7 @@ public class GameEngine extends Activity {
 
 
 
-            sprite = new GameElement(R.drawable.duck, 0, 100, getDrawable(R.drawable.duck).getBounds().width(), getDrawable(R.drawable.duck).getBounds().height(), "duck");
+            //sprite = new GameElement(R.drawable.duck, 0, 100, getDrawable(R.drawable.duck).getBounds().width(), getDrawable(R.drawable.duck).getBounds().height(), "duck");
             // Load Bob from his .png file
             bitmapSprite = BitmapFactory.decodeResource(this.getResources(), R.drawable.duck);
 
@@ -268,7 +268,7 @@ public class GameEngine extends Activity {
             //final String getMarkerArray = url + latititudeGet + "//" + longitudeGet + "//" + "2000";
 
             final String levelURL = url + levelId;
-            return level;
+            return null;
         }
 
     }

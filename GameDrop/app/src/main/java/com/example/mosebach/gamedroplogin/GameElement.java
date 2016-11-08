@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 public class GameElement {
 
     transient Drawable pic;
-    int pic_id;
     int x, y;
     int dx, dy;
     int width, height;
@@ -17,9 +16,8 @@ public class GameElement {
     //tied to another element?do elements keep score or level?
 
     // Set construct
-    public GameElement(int pic_id, int x, int y, int width, int height, String name){
-        this.pic = pic;
-        this.pic_id = pic_id;
+    public GameElement(Drawable d, int x, int y, int width, int height, String name){
+        this.pic = d;
         this.x = x;
         this.y = y;
         this.dx = 0;
