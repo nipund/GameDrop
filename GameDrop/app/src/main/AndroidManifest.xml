@@ -39,9 +39,9 @@
         <activity
             android:name=".EditorActivity"
             android:exported="true"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="landscape"></activity>
         <activity android:name=".ElementSelectorActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name=".GameEngine"
             android:exported="true"

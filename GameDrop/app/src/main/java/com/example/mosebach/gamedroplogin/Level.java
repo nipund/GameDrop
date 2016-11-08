@@ -17,8 +17,8 @@ public class Level {
     //score?time?
 
     // Set Construct
-    public Level(String desc, String name, Drawable bkgr){
-        this.elements = new ArrayList<>();
+    public Level(ArrayList<GameElement> elements, String desc, String name, Drawable bkgr){
+        this.elements = elements;
         description = desc;
         this.name = name;
         background = bkgr;

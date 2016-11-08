@@ -13,6 +13,7 @@ public class GameElement {
     int dx, dy;
     int width, height;
     String name;
+
     boolean isSprite;
     //tied to another element?do elements keep score or level?
 
@@ -26,6 +27,7 @@ public class GameElement {
         this.width = width;
         this.height = height;
         this.name = name;
+        isSprite = false;
     }
 
     public void setPic(Drawable pic) {this.pic = pic;}
@@ -75,6 +77,14 @@ public class GameElement {
     public int left(){return this.x;}
 
     public int top(){return this.y + this.height;}
+
+    public boolean isSprite() {
+        return isSprite;
+    }
+
+    public void setSprite(boolean sprite) {
+        isSprite = sprite;
+    }
 
 
 

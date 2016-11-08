@@ -309,6 +309,8 @@ public class GameEngine extends Activity {
 
                                     System.out.println(youClassList.get(1));
 
+                                    level = new Level(youClassList, null, null, null);
+
                                 }else{
                                     System.out.println("Access to markers failed");
                                 }
@@ -328,7 +330,7 @@ public class GameEngine extends Activity {
             requestQueue.add(req);
 
 
-            return new Level();
+            return level;
         }
 
         public void drawElements(ArrayList<GameElement> elements){
