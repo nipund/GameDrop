@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.graphics.Color;
@@ -104,7 +105,7 @@ public class GameEngine extends Activity {
 
         GameElement sprite;
 
-        int levelId;
+        String serializedLevelString;
 
         // Bob starts off not moving
         boolean isMovingRight = false;
@@ -129,13 +130,11 @@ public class GameEngine extends Activity {
 
             Intent i = getIntent();
 
-            levelId = i.getIntExtra("levelId", 0);
+            serializedLevelString = i.getStringExtra("level");
 
-            level = getLevel(892);
-            //level = getLevel(levelId);
+            level = deserialize(serializedLevelString);
 
-
-            sprite = new GameElement(R.drawable.basketball, 0, 100, 100, 100, "basketball");
+            sprite = getSprite();
             // Load Bob from his .png file
             bitmapSprite = BitmapFactory.decodeResource(this.getResources(), R.drawable.basketball);
 
@@ -285,6 +284,28 @@ public class GameEngine extends Activity {
             return true;
         }
 
+        public Level deserialize(String serializedLevelString){
+
+            Type listType = new TypeToken<ArrayList<GameElement>>(){}.getType();
+
+            ArrayList<GameElement> youClassList = new Gson().fromJson(serializedLevelString, listType);
+
+            System.out.println(youClassList.get(1));
+
+            level = new Level(youClassList, null, null, null);
+
+            return level;
+        }
+
+        public GameElement getSprite(){
+            for(int i = 0; i < level.elements.size(); i++){
+                if(level.elements.get(i).isSprite){
+                    return level.elements.get(i);
+                }
+            }
+           return null;
+        }
+
         public Level getLevel(int levelId){
 
             //"http://proj-309-gp-06.cs.iastate.edu/users/login/" + userName.getText() + "/" + password.getText();
@@ -328,7 +349,7 @@ public class GameEngine extends Activity {
 
             RequestQueue requestQueue = Volley.newRequestQueue(GameEngine.this);
             requestQueue.add(req);
-
+            SystemClock.sleep(1000);
 
             return level;
         }
