@@ -131,7 +131,6 @@ public class GameEngine extends Activity {
             level = getLevel(levelId);
 
 
-
             sprite = new GameElement(R.drawable.basketball, 0, 100, 100, 100, "basketball");
             // Load Bob from his .png file
             bitmapSprite = BitmapFactory.decodeResource(this.getResources(), R.drawable.basketball);

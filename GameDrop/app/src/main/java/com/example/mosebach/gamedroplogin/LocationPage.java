@@ -128,9 +128,10 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
                                     double tempLat = object.getDouble("lat");
                                     double tempLng = object.getDouble("lng");
                                     String name = object.getString("name");
-                                    System.out.println("Lat " + tempLat + " Lng "+ tempLng + " Name " + name);
+                                    String ID = object.getString("id");
+                                    System.out.println("Lat " + tempLat + " Lng "+ tempLng + " Name " + name + " id" + ID);
                                     LatLng tempCoord = new LatLng(tempLat,tempLng);
-                                    Marker temp = userMap.addMarker(new MarkerOptions().position(tempCoord).title(name + " Lat :"+tempLat+" "+"Long :"+tempLng));
+                                    Marker temp = userMap.addMarker(new MarkerOptions().position(tempCoord).title(name + " Lat :"+tempLat+" "+"Long :"+tempLng +" ID:" + ID));
                                 }
                                 System.out.println(getMarkerArray);
                             }else{
