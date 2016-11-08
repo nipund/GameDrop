@@ -48,11 +48,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 /**
@@ -62,11 +66,16 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
     String url = "http://proj-309-gp-06.cs.iastate.edu/markers/within/";
+    String url2 = "http://proj-309-gp-06.cs.iastate.edu/levels/get/";
+
     double latititudeGet = 0;
     double longitudeGet = 0;
+    public Level level;
+    public Intent intent;
     private GoogleMap userMap;
     GoogleApiClient userGoogleApiClient;
     LocationRequest lRequest;
+    public String getMarkerArray;
     int mapToggle = 0;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +86,7 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
         if(extras != null){
             latititudeGet = extras.getDouble("n1");
             longitudeGet = extras.getDouble("n2");
+            getMarkerArray = url + latititudeGet + "//" + longitudeGet + "//" + "2000";
         }else{
             System.out.println("Null extras");
         }
@@ -110,7 +120,6 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
         //"http://proj-309-gp-06.cs.iastate.edu/users/login/" + userName.getText() + "/" + password.getText();
         //pat test     http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test
         //String URL = "http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test";
-        final String getMarkerArray = url + latititudeGet + "//" + longitudeGet + "//" + "2000";
         // Post params to be sent to the server
         //HashMap<String, String> params = new HashMap<String, String>();
         //params.put("token", "AbCdEfGh123456");
@@ -136,10 +145,8 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
                                         @Override
                                         public boolean onMarkerClick(Marker marker) {
                                             if(marker.getTitle() != null){
-                                                Intent intent = new Intent(LocationPage.this, GameEngine.class);
-                                                intent.putExtra("levelId",Integer.parseInt(ID));
-                                                System.out.println("Attempting to start GameEngine");
-                                                startActivity(intent);
+                                                getLevel(Integer.parseInt(ID));
+                                                System.out.println(getMarkerArray);
                                             }
                                             return true;
                                         }
@@ -208,4 +215,47 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
         lRequest.setFastestInterval(100);
         lRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
+    public Level getLevel(int levelId){
+
+        //"http://proj-309-gp-06.cs.iastate.edu/users/login/" + userName.getText() + "/" + password.getText();
+        //pat test     http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test
+        //String URL = "http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test";
+        //final String getMarkerArray = url + latititudeGet + "//" + longitudeGet + "//" + "2000";
+
+        final String levelURL = url2 + levelId;
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, levelURL, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            VolleyLog.v("Response:%n %s", response.toString(4));
+                            if(response.getBoolean("success")){
+                                intent = new Intent(LocationPage.this, GameEngine.class);
+                                String levelArray  = response.getString("level");
+                                intent.putExtra("level",levelArray);
+                                System.out.println(getMarkerArray + "  " + levelArray);
+                                startActivity(intent);
+                            }else{
+                                System.out.println("Access to markers failed");
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(req);
+
+
+        return level;
+    }
+
 }
