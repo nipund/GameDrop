@@ -76,9 +76,7 @@ public class GameElement {
 
     public int top(){return this.y + this.height;}
 
-    //Type listType = new TypeTokeen<ArrayList<YourClass>>(){}.getType();
 
-    //List<YourClass> youClassList = new Gson().fromJson(jsonArray, listType);
 
     public int bottom(){return this.y;}
 

@@ -26,11 +26,14 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -84,7 +87,7 @@ public class GameEngine extends Activity {
         Level level;
 
         //Static Server URL Begining
-        String url = "http://proj-309-gp-06.cs.iastate.edu/markers/within/";
+        String url = "http://proj-309-gp-06.cs.iastate.edu/levels/get/";
 
         // A Canvas and a Paint object
         Canvas canvas;
@@ -128,7 +131,8 @@ public class GameEngine extends Activity {
 
             levelId = i.getIntExtra("levelId", 0);
 
-            level = getLevel(levelId);
+            level = getLevel(892);
+            //level = getLevel(levelId);
 
 
             sprite = new GameElement(R.drawable.basketball, 0, 100, 100, 100, "basketball");
@@ -299,7 +303,13 @@ public class GameEngine extends Activity {
                             try {
                                 VolleyLog.v("Response:%n %s", response.toString(4));
                                 if(response.getBoolean("success")){
-                                    JSONArray markerArray  = response.getJSONArray("markers");
+                                    String levelArray  = response.getString("level");
+
+                                    Type listType = new TypeToken<ArrayList<GameElement>>(){}.getType();
+
+                                    ArrayList<GameElement> youClassList = new Gson().fromJson(levelArray, listType);
+
+                                    System.out.println(youClassList.get(1));
 
                                 }else{
                                     System.out.println("Access to markers failed");
@@ -334,7 +344,7 @@ public class GameEngine extends Activity {
 
         public void checkHitboxes(){
 
-            return null;
+            return;
         }
 
     }
