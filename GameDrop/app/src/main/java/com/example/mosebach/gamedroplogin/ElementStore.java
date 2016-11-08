@@ -8,6 +8,9 @@ public class ElementStore {
     public static int elements[] = {
             R.drawable.basketball,
             R.drawable.sample_element_1,
-            R.drawable.duck
+            R.drawable.duck,
+            R.drawable.space,
+            R.drawable.boeing,
+            R.drawable.plane
     };
 }
