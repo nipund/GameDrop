@@ -65,7 +65,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         //TO BE CHANGED ACCORDING TO SPRITE USED
         PlayerHeight = 65 ;
         PlayerWidth = 25;
-        startY = GamePanel.HEIGHT/2;
+        startY = GamePanel.HEIGHT/5;
     }
 
     @Override
@@ -359,7 +359,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
     } public void newGame()
     {
-        
+
         dissapear = false;
         bottomborder.clear();
         topborder.clear();
@@ -372,7 +372,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         player.resetDY();
         player.resetScore();
         //resets starting position of Player
-        player.setY(startY/2);
+        player.setY(startY);
         if(player.getScore()>best){
             best = player.getScore();
         }

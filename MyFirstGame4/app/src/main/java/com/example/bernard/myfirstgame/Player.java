@@ -18,7 +18,7 @@ public class Player extends GameObject{
     private long startTime;
 
     //TO BE CHANGED ACCORDING TO GAME EDITOR
-    int startY= GamePanel.HEIGHT/2;
+    int startY= GamePanel.HEIGHT/5;
     int startX= 100;
 
 
