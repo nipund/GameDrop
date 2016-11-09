@@ -1,3 +1,5 @@
+
+
 package com.example.mosebach.gamedroplogin;
 
 import android.app.Activity;
@@ -9,6 +11,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
+import android.support.v4.content.ContextCompat;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.graphics.Color;
@@ -104,10 +108,12 @@ public class GameEngine extends Activity {
 
         GameElement sprite;
 
-        int levelId;
+        String serializedLevelString;
 
         // Bob starts off not moving
         boolean isMovingRight = false;
+
+        boolean collision = false;
 
         // He can walk at 150 pixels per second
         int walkSpeedPerSecond = 150;
@@ -129,15 +135,12 @@ public class GameEngine extends Activity {
 
             Intent i = getIntent();
 
-            levelId = i.getIntExtra("levelId", 0);
+            serializedLevelString = i.getStringExtra("level");
 
-            level = getLevel(892);
-            //level = getLevel(levelId);
+            level = deserialize(serializedLevelString);
 
+            sprite = getSprite();
 
-            sprite = new GameElement(R.drawable.basketball, 0, 100, 100, 100, "basketball");
-            // Load Bob from his .png file
-            bitmapSprite = BitmapFactory.decodeResource(this.getResources(), R.drawable.basketball);
 
             // Set our boolean to true - game on!
             playing = true;
@@ -164,6 +167,9 @@ public class GameEngine extends Activity {
                 if (timeThisFrame > 0) {
                     fps = (int) ((int) 1000 / timeThisFrame);
                 }
+                if(fps > 20 && fps < 100) {
+                    sprite.setGrav(walkSpeedPerSecond / fps / 2);
+                }
 
             }
 
@@ -175,6 +181,8 @@ public class GameEngine extends Activity {
         public void update() {
 
             sprite.move();
+
+            collision = checkHitboxes();
             // If bob is moving (the player is touching the screen)
             // then move him to the right based on his target speed and the current fps.
             /*if(isMoving){
@@ -201,15 +209,11 @@ public class GameEngine extends Activity {
                 paint.setTextSize(45);
 
                 // Display the current fps on the screen
-                canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation, 20, 40, paint);
+                canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation + "\nX:" + sprite.getX() + "\nY:" + sprite.getY() + "\nCollision:" + collision, 20, 40, paint);
 
                 checkHitboxes();
 
                 drawElements(level.elements);
-
-                Drawable d = sprite.pic;
-
-                //canvas.drawBitmap(bitmapSprite, sprite.getX(), 200, paint);
 
                 // Draw everything to the screen
                 ourHolder.unlockCanvasAndPost(canvas);
@@ -248,6 +252,7 @@ public class GameEngine extends Activity {
                 case MotionEvent.ACTION_POINTER_DOWN:
 
                     sprite.setDx(0);
+                    sprite.setDy(-30);
 
                     break;
 
@@ -257,20 +262,24 @@ public class GameEngine extends Activity {
 
                     if(touchLocation > 950){
                         sprite.setDx( walkSpeedPerSecond / fps);
+                        //sprite.setGrav(walkSpeedPerSecond / fps / 2);
                     }else{
                         sprite.setDx( -walkSpeedPerSecond / fps );
+                        //sprite.setGrav(-walkSpeedPerSecond / fps / 2);
                     }
 
                     break;
-                    // Player has touched the screen
+                // Player has touched the screen
                 case MotionEvent.ACTION_DOWN:
 
                     touchLocation = motionEvent.getX();
 
                     if(touchLocation > 950){
                         sprite.setDx( walkSpeedPerSecond / fps);
+                        //sprite.setGrav(walkSpeedPerSecond / fps / 2);
                     }else{
                         sprite.setDx( -walkSpeedPerSecond / fps );
+                        //sprite.setGrav(-walkSpeedPerSecond / fps / 2);
                     }
 
                     break;
@@ -279,72 +288,68 @@ public class GameEngine extends Activity {
                 case MotionEvent.ACTION_UP:
 
                     sprite.setDx(0);
+                    //sprite.setGrav(0);
 
                     break;
             }
             return true;
         }
 
-        public Level getLevel(int levelId){
+        public Level deserialize(String serializedLevelString){
 
-            //"http://proj-309-gp-06.cs.iastate.edu/users/login/" + userName.getText() + "/" + password.getText();
-            //pat test     http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test
-            //String URL = "http://proj-309-gp-06.cs.iastate.edu/users/login/pat/test";
-            //final String getMarkerArray = url + latititudeGet + "//" + longitudeGet + "//" + "2000";
+            Type listType = new TypeToken<ArrayList<GameElement>>(){}.getType();
 
-            final String levelURL = url + levelId;
+            ArrayList<GameElement> youClassList = new Gson().fromJson(serializedLevelString, listType);
 
-            JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, levelURL, null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                VolleyLog.v("Response:%n %s", response.toString(4));
-                                if(response.getBoolean("success")){
-                                    String levelArray  = response.getString("level");
+            System.out.println(youClassList.get(1));
 
-                                    Type listType = new TypeToken<ArrayList<GameElement>>(){}.getType();
-
-                                    ArrayList<GameElement> youClassList = new Gson().fromJson(levelArray, listType);
-
-                                    System.out.println(youClassList.get(1));
-
-                                    level = new Level(youClassList, null, null, null);
-
-                                }else{
-                                    System.out.println("Access to markers failed");
-                                }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.e("Error: ", error.getMessage());
-                }
-            });
-
-            RequestQueue requestQueue = Volley.newRequestQueue(GameEngine.this);
-            requestQueue.add(req);
-
-
+            level = new Level(youClassList, null, null, null);
+            for(GameElement ge : level.elements) {
+                Drawable d = ContextCompat.getDrawable(getApplicationContext(), ElementStore.elements[ge.pic_id]);
+                ge.setPic(d);
+            }
             return level;
+        }
+
+        public GameElement getSprite(){
+            for(int i = 0; i < level.elements.size(); i++){
+                if(level.elements.get(i).isSprite){
+                    return level.elements.get(i);
+                }
+            }
+            return null;
         }
 
         public void drawElements(ArrayList<GameElement> elements){
 
-            /*for(int i = 0; i < elements.size(); i++){
-                canvas.drawBitmap(bitmapSprite, sprite.getX(), 200, paint);
+            for(int i = 0; i < elements.size(); i++){
+                GameElement ge = elements.get(i);
+                Drawable d = ge.pic;
+                d.setBounds(ge.x, ge.y, ge.getRight(), ge.getBottom());
+                d.setAlpha(255);
+                d.draw(canvas);
 
             }
-            canvas.drawBitmap(bitmapSprite, sprite.getX(), 200, paint);*/
         }
 
-        public void checkHitboxes(){
+        public boolean checkHitboxes(){
 
-            return;
+            //check every element with sprite
+            for(int i = 0; i < level.elements.size(); i++){
+
+                //dont check the sprite to itself
+                if(level.elements.get(i).isSprite != true){
+                    GameElement ge = level.elements.get(i);
+
+                    if(sprite.left() < ge.right() &&
+                            sprite.right() > ge.left() &&
+                            sprite.bottom() < ge.top() &&
+                            sprite.top() > ge.bottom()){
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
     }
@@ -373,3 +378,4 @@ public class GameEngine extends Activity {
 
 
 }
+
