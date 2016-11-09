@@ -72,6 +72,7 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
     double longitudeGet = 0;
     public Level level;
     public Intent intent;
+    public String ID;
     private GoogleMap userMap;
     GoogleApiClient userGoogleApiClient;
     LocationRequest lRequest;
@@ -137,7 +138,7 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
                                     double tempLat = object.getDouble("lat");
                                     double tempLng = object.getDouble("lng");
                                     String name = object.getString("name");
-                                    final String ID = object.getString("id");
+                                    ID = object.getString("id");
                                     System.out.println("Lat " + tempLat + " Lng "+ tempLng + " Name " + name + " id" + ID);
                                     LatLng tempCoord = new LatLng(tempLat,tempLng);
                                     Marker temp = userMap.addMarker(new MarkerOptions().position(tempCoord).title(name + " Lat :"+tempLat+" "+"Long :"+tempLng +" ID:" + ID));
