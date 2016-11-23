@@ -7,11 +7,17 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -50,6 +56,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private boolean started;
     private int best;
     private int startY;
+    public Level level;
 
 
 
@@ -432,6 +439,32 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             canvas.drawText("RELEASE TO GO DOWN",WIDTH/2-50,HEIGHT/2+40 ,paint1);
         }
     }
+    public Level deserialize(String serializedLevelString){
+
+        Type listType = new TypeToken<ArrayList<GameElement>>(){}.getType();
+
+        ArrayList<GameElement> youClassList = new Gson().fromJson(serializedLevelString, listType);
+
+        System.out.println(youClassList.get(1));
+
+        level = new Level(youClassList, null, null, null);
+        for(GameElement ge : level.elements) {
+            Drawable d = ContextCompat.getDrawable(getApplicationContext(), ElementStore.elements[ge.pic_id]);
+            ge.setPic(d);
+        }
+        return level;
+    }
+
+    public GameElement getSprite(){
+        for(int i = 0; i < level.elements.size(); i++){
+            if(level.elements.get(i).isSprite){
+                return level.elements.get(i);
+            }
+        }
+        return null;
+    }
+
+
 
 }
 
