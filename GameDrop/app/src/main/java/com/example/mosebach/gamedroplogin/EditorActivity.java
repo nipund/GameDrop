@@ -25,7 +25,8 @@ public class EditorActivity extends AppCompatActivity {
     private TileView tv;
     double latititudeGet = 0;
     double longitudeGet = 0;
-    String url = "http://proj-309-gp-06.cs.iastate.edu/levels/create";
+    //String url = "http://proj-309-gp-06.cs.iastate.edu/levels/create";
+    String url = "http://aa6c7767.ngrok.io/levels/create/";
     private String json;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class EditorActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 //Type aryType = new TypeToken<GameElement>(){}.getType();
                 json = gson.toJson(tv.elements);
+                System.out.println(json.toString());
                 sendObjectToVolley();
                 System.out.println(json);
                 return true;
@@ -117,7 +119,7 @@ public class EditorActivity extends AppCompatActivity {
                 params.put("lat", Double.toString(latititudeGet));
                 params.put("lng", Double.toString(longitudeGet));
                 params.put("Level", json);
-                System.out.println(url + latititudeGet + " " + longitudeGet);
+                System.out.println(url + latititudeGet + "/" + longitudeGet);
                 return params;
             }
         };

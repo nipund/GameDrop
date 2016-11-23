@@ -65,33 +65,38 @@ import java.util.Map;
 public class LocationPage extends AppCompatActivity implements OnMapReadyCallback,LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
-    String url = "http://proj-309-gp-06.cs.iastate.edu/markers/within/";
-    String url2 = "http://proj-309-gp-06.cs.iastate.edu/levels/get/";
+    //String url = "http://proj-309-gp-06.cs.iastate.edu/markers/within/";
+    String url = "http://aa6c7767.ngrok.io/markers/within/";
+    //String url2 = "http://proj-309-gp-06.cs.iastate.edu/levels/get/";
+    String url2 = "http://aa6c7767.ngrok.io/levels/get/";
 
     double latititudeGet = 0;
     double longitudeGet = 0;
     public Level level;
     public Intent intent;
-    public String ID;
+    public ArrayList<String> idTracker;
+    public int counter = 0;
     private GoogleMap userMap;
     GoogleApiClient userGoogleApiClient;
     LocationRequest lRequest;
     public String getMarkerArray;
+    public ArrayList<Marker> markerArrayList;
     int mapToggle = 0;
+    public JSONArray markerArray;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location_page);
         System.out.println("Entered locationPage"+ "latitiutdeGet" + " " + longitudeGet);
-        Log.i("LocationPage", "entered locationpage " + latititudeGet + " " + longitudeGet);
+        markerArrayList = new ArrayList<Marker>();
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             latititudeGet = extras.getDouble("n1");
             longitudeGet = extras.getDouble("n2");
-            getMarkerArray = url + latititudeGet + "//" + longitudeGet + "//" + "2000";
+            getMarkerArray = url + latititudeGet + "/" + longitudeGet + "/" + "2000";
         }else{
             System.out.println("Null extras");
         }
-        System.out.println("n1: "+latititudeGet+" "+"n2: "+latititudeGet);
+        System.out.println("n1: "+latititudeGet+" "+"n2: "+longitudeGet);
         onMapReady(userMap);
         userGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -124,7 +129,7 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
         // Post params to be sent to the server
         //HashMap<String, String> params = new HashMap<String, String>();
         //params.put("token", "AbCdEfGh123456");
-
+        System.out.println("Entering getMarkers");
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, getMarkerArray, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -132,22 +137,29 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
                         try {
                             VolleyLog.v("Response:%n %s", response.toString(4));
                             if(response.getBoolean("success")){
-                                JSONArray markerArray  = response.getJSONArray("markers");
+                                System.out.println("Entering json request for getMarkers");
+                                markerArray  = response.getJSONArray("markers");
                                 for(int i = 0; i<markerArray.length(); i++ ){
-                                    JSONObject object = markerArray.getJSONObject(i);
+                                    counter = i;
+                                    final JSONObject object = markerArray.getJSONObject(i);
                                     double tempLat = object.getDouble("lat");
                                     double tempLng = object.getDouble("lng");
                                     String name = object.getString("name");
-                                    ID = object.getString("id");
+                                    String ID = object.getString("id");
                                     System.out.println("Lat " + tempLat + " Lng "+ tempLng + " Name " + name + " id" + ID);
                                     LatLng tempCoord = new LatLng(tempLat,tempLng);
                                     Marker temp = userMap.addMarker(new MarkerOptions().position(tempCoord).title(name + " Lat :"+tempLat+" "+"Long :"+tempLng +" ID:" + ID));
+                                    // markerArrayList.add(i,temp);
+                                   //arrayListController(markerArrayList,temp,markerArray);
                                     userMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                                         @Override
                                         public boolean onMarkerClick(Marker marker) {
                                             if(marker.getTitle() != null){
-                                                getLevel(Integer.parseInt(ID));
-                                                System.out.println(getMarkerArray);
+                                                int temp = marker.getTitle().indexOf("ID:");
+                                                int temp2 = marker.getTitle().length();
+                                                String desiredId = marker.getTitle().substring(temp+3,temp2);
+                                                System.out.println("Desired ID" + desiredId);
+                                                getLevel(Integer.parseInt(desiredId));
                                             }
                                             return true;
                                         }
@@ -160,17 +172,19 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            System.out.println("Request not working");
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.e("Error: ", error.getMessage());
+                VolleyLog.e("Request not working", error.getMessage());
             }
         });
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(req);
+        System.out.println("Exiting getMarkers");
     }
     public void onConnected(Bundle bundle){
         createLocationRequest();
@@ -234,6 +248,7 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
                             if(response.getBoolean("success")){
                                 intent = new Intent(LocationPage.this, GameEngine.class);
                                 String levelArray  = response.getString("level");
+                                //System.out.println("This is the level " + levelArray);
                                 intent.putExtra("level",levelArray);
                                 System.out.println(getMarkerArray + "  " + levelArray);
                                 startActivity(intent);
@@ -259,4 +274,14 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
         return level;
     }
 
+    public void arrayListController(ArrayList<Marker> markerArrayList, Marker temp, JSONArray markerArray){
+        for(int i = 0; i<markerArray.length();i++){
+            if(markerArrayList.get(i).equals(temp)){
+                temp.remove();
+            }
+
+        }
+    }
 }
+
+
