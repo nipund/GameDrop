@@ -71,6 +71,14 @@ public class EditorActivity extends AppCompatActivity {
             case R.id.setSprite:
                 tv.setToSprite();
                 return true;
+            case R.id.testLevel:
+                gson = new Gson();
+                json = gson.toJson(tv.elements);
+                Intent intention = new Intent(this, GameEngine.class);
+                intention.putExtra("level",json.toString().replaceAll("\"name\":\"Test\",",""));
+                startActivity(intention);
+                System.out.println("json test" + json.toString().replaceAll("\"name\":\"Test\",",""));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -301,7 +301,7 @@ public class GameEngine extends Activity {
 
             ArrayList<GameElement> youClassList = new Gson().fromJson(serializedLevelString, listType);
 
-            System.out.println(youClassList.get(1));
+            System.out.println("This is the class gotten" + youClassList.get(1));
 
             level = new Level(youClassList, null, null, null);
             for(GameElement ge : level.elements) {
@@ -314,6 +314,7 @@ public class GameEngine extends Activity {
         public GameElement getSprite(){
             for(int i = 0; i < level.elements.size(); i++){
                 if(level.elements.get(i).isSprite){
+                    System.out.println("The sprite is" + level.elements.get(i));
                     return level.elements.get(i);
                 }
             }

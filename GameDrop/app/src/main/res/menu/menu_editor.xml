@@ -15,4 +15,7 @@
     <item android:title="Save Level"
         android:id="@+id/saveLevel"
          />
+    <item android:title="Test Level"
+        android:id="@+id/testLevel"
+        />
 </menu>

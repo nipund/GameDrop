@@ -439,7 +439,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             canvas.drawText("RELEASE TO GO DOWN",WIDTH/2-50,HEIGHT/2+40 ,paint1);
         }
     }
-    public Level deserialize(String serializedLevelString){
+   /* public Level deserialize(String serializedLevelString){
 
         Type listType = new TypeToken<ArrayList<GameElement>>(){}.getType();
 
@@ -454,7 +454,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
         return level;
     }
-
+    */
     public GameElement getSprite(){
         for(int i = 0; i < level.elements.size(); i++){
             if(level.elements.get(i).isSprite){
