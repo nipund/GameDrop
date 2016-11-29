@@ -1,6 +1,7 @@
 package com.example.mosebach.gamedroplogin;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -26,8 +27,9 @@ import java.util.Random;
  */
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
-    public static final int WIDTH = 856;
-    public static final int HEIGHT = 480;
+
+    public static final int WIDTH = getScreenWidth();//856;
+    public static final int HEIGHT =getScreenHeight();//480;
     public static final int MOVESPEED = -5;
     private long smokeStartTime;
     private long missileStartTime;
@@ -60,6 +62,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 
 
+
     public GamePanel(Context context, int pic) {
         super(context);
 
@@ -73,6 +76,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         PlayerHeight = 65 ;
         PlayerWidth = 25;
         startY = GamePanel.HEIGHT/5;
+    }
+    public static int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    public static int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
     @Override

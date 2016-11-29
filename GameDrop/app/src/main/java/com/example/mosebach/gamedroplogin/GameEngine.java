@@ -13,6 +13,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.graphics.Color;
@@ -72,6 +73,7 @@ public class GameEngine extends Activity {
     // A thread and can override the run method.
     class GameView extends SurfaceView implements Runnable {
 
+        private final float xdpi, ydpi;
         //TEST VALUE
         float touchLocation = 0;
 
@@ -123,10 +125,12 @@ public class GameEngine extends Activity {
         boolean collision = false;
 
         // He can walk at 150 pixels per second
-        int walkSpeedPerSecond = 150;
+        int walkSpeedPerSecond;
+
+        int gravSpeed;
 
         // He starts 10 pixels from the left
-        int spriteXPos = 10;
+        int spriteXPos;
 
         // When the we initialize (call new()) on gameView
         // This special constructor method runs
@@ -152,6 +156,14 @@ public class GameEngine extends Activity {
             // Set our boolean to true - game on!
             playing = true;
 
+            // Get DPI of screen to scale game for different screen sizes/resolutions.
+            DisplayMetrics metrics = getResources().getDisplayMetrics();
+            xdpi = metrics.xdpi;
+            ydpi = metrics.ydpi;
+
+            gravSpeed = yScale(150);
+            walkSpeedPerSecond = xScale(150);
+            spriteXPos = xScale(10);
         }
 
         @Override
@@ -175,7 +187,7 @@ public class GameEngine extends Activity {
                     fps = (int) ((int) 1000 / timeThisFrame);
                 }
                 if(fps > 20 && fps < 100) {
-                    sprite.setGrav(walkSpeedPerSecond / fps / 2);
+                    sprite.setGrav(gravSpeed / fps / 2);
                 }
 
             }
@@ -220,7 +232,10 @@ public class GameEngine extends Activity {
                 paint.setTextSize(45);
 
                 // Display the current fps on the screen
-                canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation + "\nX:" + sprite.getX() + "\nY:" + sprite.getY() + "\nCollision:" + collision, 20, 40, paint);
+                canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation + "\nX:" + sprite.getX()
+                        + "\nY:" + sprite.getY() + "\nCollision:" + collision + " DPI x,y:" + xdpi
+                        + "," + ydpi,
+                        20, 40, paint);
 
                 drawElements(level.elements);
 
@@ -261,7 +276,7 @@ public class GameEngine extends Activity {
                 case MotionEvent.ACTION_POINTER_DOWN:
 
                     sprite.setDx(0);
-                    sprite.setDy(-30);
+                    sprite.setDy(yScale(-30));
 
                     break;
 
@@ -269,7 +284,7 @@ public class GameEngine extends Activity {
 
                     touchLocation = motionEvent.getX();
 
-                    if(touchLocation > 950){
+                    if(touchLocation > xScale(950)){
                         sprite.setDx( walkSpeedPerSecond / fps);
                         //sprite.setGrav(walkSpeedPerSecond / fps / 2);
                     }else{
@@ -283,7 +298,7 @@ public class GameEngine extends Activity {
 
                     touchLocation = motionEvent.getX();
 
-                    if(touchLocation > 950){
+                    if(touchLocation > xScale(950)){
                         sprite.setDx( walkSpeedPerSecond / fps);
                         //sprite.setGrav(walkSpeedPerSecond / fps / 2);
                     }else{
@@ -305,13 +320,9 @@ public class GameEngine extends Activity {
         }
 
         public Level deserialize(String serializedLevelString){
-
             Type listType = new TypeToken<ArrayList<GameElement>>(){}.getType();
-
             ArrayList<GameElement> youClassList = new Gson().fromJson(serializedLevelString, listType);
-
             System.out.println("This is the class gotten" + youClassList.get(1));
-
             level = new Level(youClassList, null, null, null);
             for(GameElement ge : level.elements) {
                 Drawable d = ContextCompat.getDrawable(getApplicationContext(), ElementStore.elements[ge.pic_id]);
@@ -335,7 +346,8 @@ public class GameEngine extends Activity {
             for(int i = 0; i < elements.size(); i++){
                 GameElement ge = elements.get(i);
                 Drawable d = ge.pic;
-                d.setBounds(ge.x, ge.y, ge.getRight(), ge.getBottom());
+                d.setBounds(xScale(ge.x), yScale(ge.y), xScale(ge.getRight()), yScale(ge.getBottom()));
+                System.out.println(""+xScale(ge.x)+","+yScale(ge.y)+","+xScale(ge.getRight())+","+yScale(ge.getBottom()));
                 d.setAlpha(255);
                 d.draw(canvas);
 
@@ -356,7 +368,7 @@ public class GameEngine extends Activity {
                             sprite.bottom() < ge.top() &&
                             sprite.top() > ge.bottom()){
 
-                        //fixHitboxes(ge);
+                        fixHitboxes(ge);
                         return true;
                     }
                 }
@@ -364,19 +376,31 @@ public class GameEngine extends Activity {
             return false;
         }
 
-        private void fixHitboxes(GameElement ge){
-            if(ge.top() > sprite.bottom() && ge.top() < oldSprite.bottom()){
+        private void fixHitboxes(GameElement ge) {
+            if (ge.top() > sprite.bottom() && ge.top() > oldSprite.bottom()) {
                 sprite.setBottom(ge.top());
-            }else if(ge.right() > sprite.left() && ge.right() < oldSprite.left()){
+            } else if (ge.right() > sprite.left() && ge.right() < oldSprite.left()) {
                 sprite.setLeft(ge.right());
-            }else if(ge.left() < sprite.right() && ge.left() < oldSprite.right()){
+            } else if (ge.left() > sprite.right() && ge.left() < oldSprite.right()) {
                 sprite.setRight(ge.left());
-            }else if(ge.bottom() < sprite.top() && ge.bottom() > oldSprite.top()){
+            } else if (ge.bottom() < sprite.top() && ge.bottom() > oldSprite.top()) {
                 sprite.setTop(ge.bottom());
             }
         }
+        int xScale(int x) {
+            float temp = x/480F;
+            temp *= ydpi;
+            return Math.round(temp);
+        }
+
+        int yScale(int y) {
+            float temp = y/480F;
+            temp *= xdpi;
+            return Math.round(temp);
+        }
 
     }
+
     // This is the end of our GameView inner class
 
     // More SimpleGameEngine methods will go here
