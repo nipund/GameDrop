@@ -106,7 +106,14 @@ public class GameEngine extends Activity {
         // Declare an object of type Bitmap
         Bitmap bitmapSprite;
 
+        /**
+         * Game Element that tracks sprite
+         */
         GameElement sprite;
+        /**
+         * Game Element that tracks last updated sprite. Used for update differences like hitboxes.
+         */
+        GameElement oldSprite;
 
         String serializedLevelString;
 
@@ -180,9 +187,13 @@ public class GameEngine extends Activity {
         // We will also do other things like collision detection.
         public void update() {
 
+            if(sprite != null){
+                oldSprite = sprite;
+            }
             sprite.move();
 
             collision = checkHitboxes();
+
             // If bob is moving (the player is touching the screen)
             // then move him to the right based on his target speed and the current fps.
             /*if(isMoving){
@@ -210,8 +221,6 @@ public class GameEngine extends Activity {
 
                 // Display the current fps on the screen
                 canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation + "\nX:" + sprite.getX() + "\nY:" + sprite.getY() + "\nCollision:" + collision, 20, 40, paint);
-
-                checkHitboxes();
 
                 drawElements(level.elements);
 
@@ -333,7 +342,7 @@ public class GameEngine extends Activity {
             }
         }
 
-        public boolean checkHitboxes(){
+        private boolean checkHitboxes(){
 
             //check every element with sprite
             for(int i = 0; i < level.elements.size(); i++){
@@ -346,11 +355,25 @@ public class GameEngine extends Activity {
                             sprite.right() > ge.left() &&
                             sprite.bottom() < ge.top() &&
                             sprite.top() > ge.bottom()){
+
+                        //fixHitboxes(ge);
                         return true;
                     }
                 }
             }
             return false;
+        }
+
+        private void fixHitboxes(GameElement ge){
+            if(ge.top() > sprite.bottom() && ge.top() < oldSprite.bottom()){
+                sprite.setBottom(ge.top());
+            }else if(ge.right() > sprite.left() && ge.right() < oldSprite.left()){
+                sprite.setLeft(ge.right());
+            }else if(ge.left() < sprite.right() && ge.left() < oldSprite.right()){
+                sprite.setRight(ge.left());
+            }else if(ge.bottom() < sprite.top() && ge.bottom() > oldSprite.top()){
+                sprite.setTop(ge.bottom());
+            }
         }
 
     }
