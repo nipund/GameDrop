@@ -38,4 +38,5 @@ public class Animation {
     }
     public int getFrame() {return currentFrame;}
     public boolean playedOnce(){return playedOnce;}
+
 }
