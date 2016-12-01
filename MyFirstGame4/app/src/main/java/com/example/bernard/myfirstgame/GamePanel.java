@@ -368,14 +368,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         minBorderHeight = 5;
         maxBorderHeight = 30;
-
-        player.resetDY();
-        player.resetScore();
-        //resets starting position of Player
+//resets starting position of Player
         player.setY(startY);
+        player.resetDY();
         if(player.getScore()>best){
             best = player.getScore();
         }
+        player.resetScore();
+
+
 
         //create initial borders
 
@@ -421,7 +422,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         paint.setTextSize(30);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT,Typeface.BOLD));
         canvas.drawText("DISTANCE: "+ (player.getScore()*3),10,HEIGHT -10 , paint);
-        canvas.drawText("BEST:"+ best, WIDTH -215,HEIGHT-10,paint);
+        canvas.drawText("BEST:"+ best*3, WIDTH -215,HEIGHT-10,paint);
         if(!player.getPlaying()&&newGameCreated&&reset){
             Paint paint1 = new Paint();
             paint1.setTextSize(40);

@@ -108,7 +108,14 @@ public class GameEngine extends Activity {
         // Declare an object of type Bitmap
         Bitmap bitmapSprite;
 
+        /**
+         * Game Element that tracks sprite
+         */
         GameElement sprite;
+        /**
+         * Game Element that tracks last updated sprite. Used for update differences like hitboxes.
+         */
+        GameElement oldSprite;
 
         String serializedLevelString;
 
@@ -119,6 +126,8 @@ public class GameEngine extends Activity {
 
         // He can walk at 150 pixels per second
         int walkSpeedPerSecond;
+
+        int gravSpeed;
 
         // He starts 10 pixels from the left
         int spriteXPos;
@@ -152,6 +161,7 @@ public class GameEngine extends Activity {
             xdpi = metrics.xdpi;
             ydpi = metrics.ydpi;
 
+            gravSpeed = yScale(150);
             walkSpeedPerSecond = xScale(150);
             spriteXPos = xScale(10);
         }
@@ -177,7 +187,7 @@ public class GameEngine extends Activity {
                     fps = (int) ((int) 1000 / timeThisFrame);
                 }
                 if(fps > 20 && fps < 100) {
-                    sprite.setGrav(walkSpeedPerSecond / fps / 2);
+                    sprite.setGrav(gravSpeed / fps / 2);
                 }
 
             }
@@ -189,13 +199,12 @@ public class GameEngine extends Activity {
         // We will also do other things like collision detection.
         public void update() {
 
+            if(sprite != null){
+                oldSprite = sprite;
+            }
             sprite.move();
 
             collision = checkHitboxes();
-            if(collision == true){
-                System.out.println("Collision"+collision);
-                sprite.setGrav(0);
-            }
             // If bob is moving (the player is touching the screen)
             // then move him to the right based on his target speed and the current fps.
             /*if(isMoving){
@@ -226,8 +235,6 @@ public class GameEngine extends Activity {
                         + "\nY:" + sprite.getY() + "\nCollision:" + collision + " DPI x,y:" + xdpi
                         + "," + ydpi,
                         20, 40, paint);
-
-                checkHitboxes();
 
                 drawElements(level.elements);
 
@@ -346,7 +353,7 @@ public class GameEngine extends Activity {
             }
         }
 
-        public boolean checkHitboxes(){
+        private boolean checkHitboxes(){
 
             //check every element with sprite
             for(int i = 0; i < level.elements.size(); i++){
@@ -358,6 +365,8 @@ public class GameEngine extends Activity {
                             sprite.right() > ge.left() &&
                             sprite.bottom() < ge.top() &&
                             sprite.top() > ge.bottom()){
+
+                        fixHitboxes(ge);
                         return true;
                     }
                 }
@@ -365,15 +374,26 @@ public class GameEngine extends Activity {
             return false;
         }
 
+        private void fixHitboxes(GameElement ge) {
+            if (ge.top() > sprite.bottom() && ge.top() > oldSprite.bottom()) {
+                sprite.setBottom(ge.top());
+            } else if (ge.right() > sprite.left() && ge.right() < oldSprite.left()) {
+                sprite.setLeft(ge.right());
+            } else if (ge.left() > sprite.right() && ge.left() < oldSprite.right()) {
+                sprite.setRight(ge.left());
+            } else if (ge.bottom() < sprite.top() && ge.bottom() > oldSprite.top()) {
+                sprite.setTop(ge.bottom());
+            }
+        }
         int xScale(int x) {
             float temp = x/480F;
-            temp *= xdpi;
+            temp *= ydpi;
             return Math.round(temp);
         }
 
         int yScale(int y) {
             float temp = y/480F;
-            temp *= ydpi;
+            temp *= xdpi;
             return Math.round(temp);
         }
 
