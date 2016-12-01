@@ -144,6 +144,7 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
                                     final JSONObject object = markerArray.getJSONObject(i);
                                     double tempLat = object.getDouble("lat");
                                     double tempLng = object.getDouble("lng");
+                                    System.out.println(object.toString());
                                     String name = object.getString("name");
                                     String ID = object.getString("id");
                                     System.out.println("Lat " + tempLat + " Lng "+ tempLng + " Name " + name + " id" + ID);

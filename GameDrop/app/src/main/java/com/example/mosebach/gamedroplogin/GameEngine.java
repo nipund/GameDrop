@@ -192,6 +192,10 @@ public class GameEngine extends Activity {
             sprite.move();
 
             collision = checkHitboxes();
+            if(collision == true){
+                System.out.println("Collision"+collision);
+                sprite.setGrav(0);
+            }
             // If bob is moving (the player is touching the screen)
             // then move him to the right based on his target speed and the current fps.
             /*if(isMoving){
@@ -350,7 +354,6 @@ public class GameEngine extends Activity {
                 //dont check the sprite to itself
                 if(level.elements.get(i).isSprite != true){
                     GameElement ge = level.elements.get(i);
-
                     if(sprite.left() < ge.right() &&
                             sprite.right() > ge.left() &&
                             sprite.bottom() < ge.top() &&
