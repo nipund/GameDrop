@@ -232,7 +232,7 @@ public class GameEngine extends Activity {
             }*/
             long timer = elapsedTime();
             timeLeft = (int)((60000000000.0 - timer)/(1000000000.0));
-            score =  (int)((timer/89200) - collisionPenalty*(1380));
+            score =  (int)((timer/2500000) - collisionPenalty*(240));
             System.out.println("Collision penalty"+ collisionPenalty + "time left" + timeLeft);
             }else{
                 finish();
@@ -396,6 +396,9 @@ public class GameEngine extends Activity {
                             sprite.bottom() >= ge.top() &&
                             sprite.top() <= ge.bottom()){
                         collisionPenalty++;
+                        if(ge.getConsumable() == true){
+                         deleteElementOnCollision(ge);
+                        }
                         fixHitboxes(ge);
                         return true;
                     }
@@ -474,5 +477,10 @@ public class GameEngine extends Activity {
         }
         return (System.nanoTime() - start);
     }
-}
+    public void deleteElementOnCollision(GameElement ge){
+        //Add tag in gameElement that allow determines if object is consumable or not
+        if(ge.getConsumable() == true){
 
+        }
+    }
+}

@@ -19,6 +19,7 @@ public class GameElement {
     String name;
 
     boolean isSprite;
+    boolean isConsumable;
     //tied to another element?do elements keep score or level?
 
     // Set construct
@@ -33,8 +34,8 @@ public class GameElement {
         this.height = height;
         this.name = name;
         isSprite = false;
+        isConsumable = false;
     }
-
     public void setPic(Drawable pic) {this.pic = pic;}
 
     public int getRight() {
@@ -76,7 +77,6 @@ public class GameElement {
     public void setDx(int dx) {
         this.dx = dx;
     }
-
     public int right(){return this.x + this.width;}
 
     public void setRight(int x){this.x = x - this.width;}
@@ -105,8 +105,9 @@ public class GameElement {
         this.grav = grav;
     }
 
+    public void setConsumable(boolean consumable) {isConsumable = consumable;}
 
-
+    public boolean getConsumable() {return isConsumable;};
 
 
     public void move() {
