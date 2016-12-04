@@ -17,9 +17,13 @@ public class GameElement {
     int grav;
     int width, height;
     String name;
+    ElType type;
 
-    boolean isSprite;
     //tied to another element?do elements keep score or level?
+
+    public enum ElType {
+        OBJECT, SPRITE, PLATFORM, COIN, POWERUP
+    }
 
     // Set construct
     public GameElement(int pic_id, int x, int y, int width, int height, String name){
@@ -32,7 +36,7 @@ public class GameElement {
         this.width = width;
         this.height = height;
         this.name = name;
-        isSprite = false;
+        type = ElType.OBJECT; //isSprite = false;
     }
 
     public void setPic(Drawable pic) {this.pic = pic;}
@@ -93,12 +97,14 @@ public class GameElement {
 
     public void setBottom(int y){this.y = y - this.height;}
 
-    public boolean isSprite() {
-        return isSprite;
-    }
+    public boolean isSprite() {return type == ElType.SPRITE;}
 
     public void setSprite(boolean sprite) {
-        isSprite = sprite;
+        if(sprite) {
+            type = ElType.SPRITE;
+        } else {
+            type = ElType.OBJECT;
+        }
     }
 
     public void setGrav(int grav) {

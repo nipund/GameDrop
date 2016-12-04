@@ -468,7 +468,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     */
     public GameElement getSprite(){
         for(int i = 0; i < level.elements.size(); i++){
-            if(level.elements.get(i).isSprite){
+            if(level.elements.get(i).isSprite()){
                 return level.elements.get(i);
             }
         }
