@@ -58,6 +58,7 @@ public class GameEngine extends Activity {
     private long start = System.nanoTime();
     private int score;
     private int collisionPenalty;
+    private int timeLeft;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,14 +217,10 @@ public class GameEngine extends Activity {
                 spriteXPos = spriteXPos + (walkSpeedPerSecond / fps);
             }*/
             long timer = elapsedTime();
+            timeLeft = (int)((60000000000.0 - timer)/(1000000000.0));
             score =  (int)((timer/89200) - collisionPenalty*(1380));
-            System.out.println("Collision penalty"+ collisionPenalty);
+            System.out.println("Collision penalty"+ collisionPenalty + "time left" + timeLeft);
             }else{
-                try{
-                    wait(100);
-                }catch(InterruptedException ex){
-                    System.out.println("Can not wait for activity");
-                }
                 finish();
                 System.out.println("FINISH!");
             }
@@ -249,7 +246,7 @@ public class GameEngine extends Activity {
                 // Display the current fps on the screen
                 canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation + "\nX:" + sprite.getX()
                         + "\nY:" + sprite.getY() + "\nCollision:" + collision + " DPI x,y:" + xdpi
-                        + "," + ydpi +"score: "+score,
+                        + "," + ydpi +"score: "+score+"\ntime left: "+timeLeft,
                         20, 40, paint);
 
                 drawElements(level.elements);
