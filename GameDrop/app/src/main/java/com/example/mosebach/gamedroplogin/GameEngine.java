@@ -40,6 +40,9 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Timer;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Created by mosebach on 11/6/2016.
@@ -51,7 +54,10 @@ public class GameEngine extends Activity {
     // It will also hold the logic of the game
     // and respond to screen touches as well
     GameView gameView;
-
+    private int signal = 0;
+    private long start = System.nanoTime();
+    private int score;
+    private int collisionPenalty;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,6 +207,9 @@ public class GameEngine extends Activity {
         // We will also do other things like collision detection.
         public void update() {
 
+
+            if (signal == 0) {
+
             if(sprite != null){
                 oldSprite = sprite.clone();
             }
@@ -216,10 +225,22 @@ public class GameEngine extends Activity {
 
             // If bob is moving (the player is touching the screen)
             // then move him to the right based on his target speed and the current fps.
+
             /*if(isMoving){
                 spriteXPos = spriteXPos + (walkSpeedPerSecond / fps);
             }*/
-
+            long timer = elapsedTime();
+            score =  (int)((timer/89200) - collisionPenalty*(1380));
+            System.out.println("Collision penalty"+ collisionPenalty);
+            }else{
+                try{
+                    wait(100);
+                }catch(InterruptedException ex){
+                    System.out.println("Can not wait for activity");
+                }
+                finish();
+                System.out.println("FINISH!");
+            }
         }
 
         // Draw the newly updated scene
@@ -242,7 +263,7 @@ public class GameEngine extends Activity {
                 // Display the current fps on the screen
                 canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation + "\nX:" + sprite.getX()
                         + "\nY:" + sprite.getY() + "\nCollision:" + collision + " DPI x,y:" + xdpi
-                        + "," + ydpi,
+                        + "," + ydpi +"score: "+score,
                         20, 40, paint);
 
                 drawElements(level.elements);
@@ -357,7 +378,7 @@ public class GameEngine extends Activity {
                 GameElement ge = elements.get(i);
                 Drawable d = ge.pic;
                 d.setBounds(xScale(ge.x), yScale(ge.y), xScale(ge.getRight()), yScale(ge.getBottom()));
-                System.out.println(""+xScale(ge.x)+","+yScale(ge.y)+","+xScale(ge.getRight())+","+yScale(ge.getBottom()));
+                //System.out.println(""+xScale(ge.x)+","+yScale(ge.y)+","+xScale(ge.getRight())+","+yScale(ge.getBottom()));
                 d.setAlpha(255);
                 d.draw(canvas);
 
@@ -377,7 +398,7 @@ public class GameEngine extends Activity {
                             sprite.right() >= ge.left() &&
                             sprite.bottom() >= ge.top() &&
                             sprite.top() <= ge.bottom()){
-
+                        collisionPenalty++;
                         fixHitboxes(ge);
                         return true;
                     }
@@ -448,8 +469,13 @@ public class GameEngine extends Activity {
         // Tell the gameView pause method to execute
         gameView.pause();
     }
-
-
-
+    private long elapsedTime(){
+        if((System.nanoTime() - start) >= 60000000000.0){
+            signal = 1;
+        }else{
+            System.out.println("elapsed time: "+(System.nanoTime() - start));
+        }
+        return (System.nanoTime() - start);
+    }
 }
 
