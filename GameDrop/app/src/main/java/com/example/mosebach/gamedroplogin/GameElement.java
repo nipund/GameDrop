@@ -85,13 +85,13 @@ public class GameElement {
 
     public void setLeft(int x){ this.x = x;}
 
-    public int top(){return this.y + this.height;}
+    public int top(){return this.y;}
 
-    public void setTop(int y) {this.y = y - this.height;}
+    public void setTop(int y) {this.y = y;}
 
-    public int bottom(){return this.y;}
+    public int bottom(){return this.y + height;}
 
-    public void setBottom(int y){this.y = y;}
+    public void setBottom(int y){this.y = y - this.height;}
 
     public boolean isSprite() {
         return isSprite;
@@ -118,7 +118,6 @@ public class GameElement {
                 }else if(this.y > 1200){
                     this.y = 1200;
                 }
-                grav = 0;
                 this.dy = 0;
             }
 
@@ -126,6 +125,10 @@ public class GameElement {
 
 
         this.x += dx;
+    }
+
+    public GameElement clone(){
+        return new GameElement(this.pic_id, this.x, this.y, this.width, this.height, this.name);
     }
 
     public void move(float dx, float dy) {

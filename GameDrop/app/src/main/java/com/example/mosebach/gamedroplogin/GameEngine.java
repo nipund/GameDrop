@@ -183,8 +183,6 @@ public class GameEngine extends Activity {
                 // Update the frame
                 update();
 
-                // Draw the frame
-                draw();
 
                 // Calculate the fps this frame
                 // We can then use the result to
@@ -193,8 +191,12 @@ public class GameEngine extends Activity {
                 if (timeThisFrame > 0) {
                     fps = (int) ((int) 1000 / timeThisFrame);
                 }
-                if(fps > 20 && fps < 100) {
-                    sprite.setGrav(gravSpeed / fps / 2);
+                try {
+                    //if(fps > 20 && fps < 100) {
+                    //sprite.setGrav(1 /*gravSpeed / fps / 2*/);
+                    //}
+                }catch(Exception e) {
+
                 }
 
             }
@@ -205,14 +207,26 @@ public class GameEngine extends Activity {
         // In later projects we will have dozens (arrays) of objects.
         // We will also do other things like collision detection.
         public void update() {
+
+
             if (signal == 0) {
-                if (sprite != null) {
-                    oldSprite = sprite;
-                }
-                sprite.move();
-                collision = checkHitboxes();
-                // If bob is moving (the player is touching the screen)
-                // then move him to the right based on his target speed and the current fps.
+
+            if(sprite != null){
+                oldSprite = sprite.clone();
+            }
+            sprite.move();
+
+            collision = checkHitboxes();
+
+            // Draw the frame
+            draw();
+
+
+
+
+            // If bob is moving (the player is touching the screen)
+            // then move him to the right based on his target speed and the current fps.
+
             /*if(isMoving){
                 spriteXPos = spriteXPos + (walkSpeedPerSecond / fps);
             }*/
@@ -289,6 +303,8 @@ public class GameEngine extends Activity {
 
                     sprite.setDx(0);
                     sprite.setDy(yScale(-30));
+                    sprite.setGrav(1 /*gravSpeed / fps / 2*/);
+
 
                     break;
 
@@ -374,28 +390,45 @@ public class GameEngine extends Activity {
                 //dont check the sprite to itself
                 if(level.elements.get(i).isSprite != true){
                     GameElement ge = level.elements.get(i);
-                    if(sprite.left() < ge.right() &&
-                            sprite.right() > ge.left() &&
-                            sprite.bottom() < ge.top() &&
-                            sprite.top() > ge.bottom()){
+
+                    if(sprite.left() <= ge.right() &&
+                            sprite.right() >= ge.left() &&
+                            sprite.bottom() >= ge.top() &&
+                            sprite.top() <= ge.bottom()){
                         collisionPenalty++;
                         fixHitboxes(ge);
                         return true;
                     }
                 }
             }
+            sprite.setGrav(1 /*gravSpeed / fps / 2*/);
+
             return false;
         }
 
         private void fixHitboxes(GameElement ge) {
-            if (ge.top() > sprite.bottom() && ge.top() > oldSprite.bottom()) {
+            // sprite's bottom collides with objects top
+            if (ge.top() <= sprite.top() && ge.top() > oldSprite.top()) {
                 sprite.setBottom(ge.top());
-            } else if (ge.right() > sprite.left() && ge.right() < oldSprite.left()) {
-                sprite.setLeft(ge.right());
-            } else if (ge.left() > sprite.right() && ge.left() < oldSprite.right()) {
-                sprite.setRight(ge.left());
-            } else if (ge.bottom() < sprite.top() && ge.bottom() > oldSprite.top()) {
+                sprite.setDy(0);
+                sprite.setGrav(0 /*gravSpeed / fps / 2*/);
+
+            } //sprite's top collides with objects bottom
+            else if (ge.bottom() >= sprite.top() && ge.bottom() < oldSprite.top()) {
                 sprite.setTop(ge.bottom());
+                sprite.setDy(0);
+                sprite.setGrav(1 /*gravSpeed / fps / 2*/);
+
+            } // sprite's right collides with objects left
+            else if (ge.left() <= sprite.right() && ge.left() > oldSprite.right()) {
+                sprite.setRight(ge.left());
+                sprite.setGrav(1 /*gravSpeed / fps / 2*/);
+
+            } // sprite's left collides with objects right
+            else if (ge.right() >= sprite.left() && ge.right() < oldSprite.left()) {
+                sprite.setLeft(ge.right());
+                sprite.setGrav(1 /*gravSpeed / fps / 2*/);
+
             }
         }
         int xScale(int x) {
