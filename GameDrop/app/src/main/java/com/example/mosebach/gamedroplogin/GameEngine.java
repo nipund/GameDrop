@@ -361,7 +361,7 @@ public class GameEngine extends Activity {
 
         public GameElement getSprite(){
             for(int i = 0; i < level.elements.size(); i++){
-                if(level.elements.get(i).isSprite){
+                if(level.elements.get(i).isSprite()){
                     System.out.println("The sprite is" + level.elements.get(i));
                     return level.elements.get(i);
                 }
@@ -388,7 +388,7 @@ public class GameEngine extends Activity {
             for(int i = 0; i < level.elements.size(); i++){
 
                 //dont check the sprite to itself
-                if(level.elements.get(i).isSprite != true){
+                if(level.elements.get(i).isSprite() != true){
                     GameElement ge = level.elements.get(i);
 
                     if(sprite.left() <= ge.right() &&
@@ -412,9 +412,11 @@ public class GameEngine extends Activity {
         private void fixHitboxes(GameElement ge) {
             // sprite's bottom collides with objects top
             if (ge.top() <= sprite.top() && ge.top() > oldSprite.top()) {
-                sprite.setBottom(ge.top());
-                sprite.setDy(0);
-                sprite.setGrav(0 /*gravSpeed / fps / 2*/);
+                //if(ge.type == ge.ElType.PLATFORM) { // Only do this if ge is a platform
+                    sprite.setBottom(ge.top());
+                    sprite.setDy(0);
+                    sprite.setGrav(0 /*gravSpeed / fps / 2*/);
+                //}
 
             } //sprite's top collides with objects bottom
             else if (ge.bottom() >= sprite.top() && ge.bottom() < oldSprite.top()) {
