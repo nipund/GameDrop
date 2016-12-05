@@ -11,7 +11,33 @@ public class ElementStore {
             R.drawable.duck,
             R.drawable.space,
             R.drawable.plane,
+            R.drawable.castle,
+            R.drawable.coin,
             R.drawable.short_platform,
             R.drawable.long_platform
+    };
+
+    public static GameElement.ElType types[] = {
+            GameElement.ElType.OBJECT,
+            GameElement.ElType.OBJECT,
+            GameElement.ElType.OBJECT,
+            GameElement.ElType.OBJECT,
+            GameElement.ElType.OBJECT,
+            GameElement.ElType.PLATFORM,
+            GameElement.ElType.COIN,
+            GameElement.ElType.PLATFORM,
+            GameElement.ElType.PLATFORM
+    };
+
+    public static int sizes[][] = {
+            {100, 100},
+            {100, 100},
+            {100, 100},
+            {100, 100},
+            {100, 100},
+            {400, 100},
+            {100, 100},
+            {100, 100},
+            {400, 100}
     };
 }
