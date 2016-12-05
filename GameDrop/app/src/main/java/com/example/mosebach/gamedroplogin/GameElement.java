@@ -19,6 +19,7 @@ public class GameElement {
     String name;
     ElType type;
 
+    boolean isSprite;
     //tied to another element?do elements keep score or level?
 
     public enum ElType {
@@ -36,13 +37,11 @@ public class GameElement {
         this.width = width;
         this.height = height;
         this.name = name;
-        this.type = ElType.OBJECT; //isSprite = false;
     }
 
     public void setType(ElType type) {
         this.type = type;
     }
-
     public void setPic(Drawable pic) {this.pic = pic;}
 
     public int getRight() {
@@ -84,7 +83,6 @@ public class GameElement {
     public void setDx(int dx) {
         this.dx = dx;
     }
-
     public int right(){return this.x + this.width;}
 
     public void setRight(int x){this.x = x - this.width;}
@@ -113,8 +111,9 @@ public class GameElement {
         this.grav = grav;
     }
 
+    //public void setConsumable(boolean consumable) {isConsumable = consumable;}
 
-
+    //public boolean getConsumable() {return isConsumable;};
 
 
     public void move() {

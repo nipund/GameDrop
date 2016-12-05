@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EditorActivity extends AppCompatActivity {
+public class  EditorActivity extends AppCompatActivity {
 
     private TileView tv;
     double latititudeGet = 0;
@@ -84,6 +84,9 @@ public class EditorActivity extends AppCompatActivity {
                 intention.putExtra("level",json.toString().replaceAll("\"name\":\"Test\",",""));
                 startActivity(intention);
                 System.out.println("json test" + json.toString().replaceAll("\"name\":\"Test\",",""));
+                return true;
+            case R.id.delete_selected_element:
+                tv.removeSelectedElement();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

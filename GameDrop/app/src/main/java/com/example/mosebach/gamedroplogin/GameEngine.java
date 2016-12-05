@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
@@ -58,6 +59,9 @@ public class GameEngine extends Activity {
     private long start = System.nanoTime();
     private int score;
     private int collisionPenalty;
+    private int timeLeft;
+    MediaPlayer powerUp;
+    MediaPlayer background;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +69,8 @@ public class GameEngine extends Activity {
         // Initialize gameView and set it as the view
         gameView = new GameView(this);
         setContentView(gameView);
-
+        powerUp = MediaPlayer.create(this,R.raw.star);
+        background = MediaPlayer.create(this,R.raw.background);
     }
 
     // GameView class will go here
@@ -175,7 +180,7 @@ public class GameEngine extends Activity {
         @Override
         public void run() {
             while (playing) {
-
+                background.start();
                 // Capture the current time in milliseconds in startFrameTime
                 long startFrameTime = System.currentTimeMillis();
 
@@ -230,14 +235,10 @@ public class GameEngine extends Activity {
                 spriteXPos = spriteXPos + (walkSpeedPerSecond / fps);
             }*/
             long timer = elapsedTime();
-            score =  (int)((timer/89200) - collisionPenalty*(1380));
-            System.out.println("Collision penalty"+ collisionPenalty);
+            timeLeft = (int)((60000000000.0 - timer)/(1000000000.0));
+            score =  (int)((timer/2500000) - collisionPenalty*(240));
+            System.out.println("Collision penalty"+ collisionPenalty + "time left" + timeLeft);
             }else{
-                try{
-                    wait(100);
-                }catch(InterruptedException ex){
-                    System.out.println("Can not wait for activity");
-                }
                 finish();
                 System.out.println("FINISH!");
             }
@@ -263,7 +264,7 @@ public class GameEngine extends Activity {
                 // Display the current fps on the screen
                 canvas.drawText("FPS:" + fps + "\nTouch:" + touchLocation + "\nX:" + sprite.getX()
                         + "\nY:" + sprite.getY() + "\nCollision:" + collision + " DPI x,y:" + xdpi
-                        + "," + ydpi +"score: "+score,
+                        + "," + ydpi +"score: "+score+"\ntime left: "+timeLeft,
                         20, 40, paint);
 
                 drawElements(level.elements);
@@ -399,6 +400,9 @@ public class GameEngine extends Activity {
                             sprite.bottom() >= ge.top() &&
                             sprite.top() <= ge.bottom()){
                         collisionPenalty++;
+                        /*if(ge.getConsumable() == true){
+                         deleteElementOnCollision(ge);
+                        }*/
                         fixHitboxes(ge);
                         return true;
                     }
@@ -417,7 +421,14 @@ public class GameEngine extends Activity {
                     sprite.setDy(0);
                     sprite.setGrav(0 /*gravSpeed / fps / 2*/);
                 }
-
+            if (ge.top() <= sprite.top() && ge.top() > oldSprite.top()){
+                    if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
+                        powerUp.start();
+                        walkSpeedPerSecond = 300;
+                        System.out.println("Hitting power up");
+                        //sprite.setGrav(0 /*gravSpeed / fps / 2*/);
+                    }
+                }
             } //sprite's top collides with objects bottom
             else if (ge.bottom() >= sprite.top() && ge.bottom() < oldSprite.top()) {
                 sprite.setTop(ge.bottom());
@@ -479,5 +490,10 @@ public class GameEngine extends Activity {
         }
         return (System.nanoTime() - start);
     }
-}
+    public void deleteElementOnCollision(GameElement ge){
+        //Add tag in gameElement that allow determines if object is consumable or not
+       /* if(ge.getConsumable() == true){
 
+        }*/
+    }
+}
