@@ -143,6 +143,10 @@ public class GameElement {
         this.y += dy;
     }
 
+    public void collide(){
+
+    }
+
     // Default construct
     public GameElement(){
         pic = null;
