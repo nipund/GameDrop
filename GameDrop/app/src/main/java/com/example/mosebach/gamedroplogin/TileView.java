@@ -100,6 +100,18 @@ public class TileView extends View {
         return false;
     }
 
+    public void removeSelectedElement(){
+        for(int i = 0; i < elements.size(); i++){
+            if(i == selected){
+                elements.remove(i);
+            }
+        }
+
+        selected = 0;
+        this.invalidate();
+
+    }
+
     public void selectLastElement() {
         selected = elements.size() - 1;
     }

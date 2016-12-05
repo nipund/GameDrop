@@ -85,6 +85,9 @@ public class  EditorActivity extends AppCompatActivity {
                 startActivity(intention);
                 System.out.println("json test" + json.toString().replaceAll("\"name\":\"Test\",",""));
                 return true;
+            case R.id.delete_selected_element:
+                tv.removeSelectedElement();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
