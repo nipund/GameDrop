@@ -224,7 +224,7 @@ public class GameEngine extends Activity {
             sprite.move();
 
             collision = checkHitboxes();
-            zombieAI(zombieChow);
+            //zombieAI(zombieChow);
             // Draw the frame
             draw();
 
@@ -423,33 +423,63 @@ public class GameEngine extends Activity {
         private void fixHitboxes(GameElement ge) {
             // sprite's bottom collides with objects top
             if (ge.top() <= sprite.top() && ge.top() > oldSprite.top()) {
-                if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
-                    sprite.setBottom(ge.top());
-                    sprite.setDy(0);
-                    sprite.setGrav(0 /*gravSpeed / fps / 2*/);
-                }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
-                    powerUp.start();
-                    walkSpeedPerSecond = 300;
-                    System.out.println("Hitting power up");
-                }
+                bottomCollision(ge);
             } //sprite's top collides with objects bottom
             else if (ge.bottom() >= sprite.top() && ge.bottom() < oldSprite.top()) {
-                sprite.setTop(ge.bottom());
-                sprite.setDy(0);
-                sprite.setGrav(1 /*gravSpeed / fps / 2*/);
-
+                topCollision(ge);
             } // sprite's right collides with objects left
             else if (ge.left() <= sprite.right() && ge.left() > oldSprite.right()) {
-                sprite.setRight(ge.left());
-                sprite.setGrav(1 /*gravSpeed / fps / 2*/);
-
+                rightCollision(ge);
             } // sprite's left collides with objects right
             else if (ge.right() >= sprite.left() && ge.right() < oldSprite.left()) {
-                sprite.setLeft(ge.right());
-                sprite.setGrav(1 /*gravSpeed / fps / 2*/);
-
+                leftCollision(ge);
             }
         }
+
+        private void bottomCollision(GameElement ge){
+            if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
+                sprite.setBottom(ge.top());
+                sprite.setDy(0);
+                sprite.setGrav(0 /*gravSpeed / fps / 2*/);
+            }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
+                powerupCollision();
+            }
+        }
+
+        private void topCollision(GameElement ge){
+            if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
+                sprite.setTop(ge.bottom());
+                sprite.setDy(0);
+                sprite.setGrav(1);
+            }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
+                powerupCollision();
+            }
+        }
+
+        private void rightCollision(GameElement ge){
+            if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
+                sprite.setRight(ge.left());
+                sprite.setGrav(1);
+            }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
+                powerupCollision();
+            }
+        }
+
+        private void leftCollision(GameElement ge){
+            if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
+                sprite.setLeft(ge.right());
+                sprite.setGrav(1);
+            }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
+                powerupCollision();
+            }
+        }
+
+        private void powerupCollision(){
+            powerUp.start();
+            walkSpeedPerSecond = 300;
+            System.out.println("Hitting power up");
+        }
+
         int xScale(int x) {
             float temp = x/480F;
             temp *= ydpi;
@@ -493,6 +523,7 @@ public class GameEngine extends Activity {
         }
         return (System.nanoTime() - start);
     }
+
     public void zombieAI(GameElement ge){
       if(ge.type == GameElement.ElType.ZOMBIE){
             ge.setDx(15);
