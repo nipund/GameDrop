@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -61,18 +62,23 @@ public class EditorActivity extends AppCompatActivity {
                 tv.invalidate();
                 return true;
             case R.id.saveLevel:
-                Gson gson = new Gson();
-                //Type aryType = new TypeToken<GameElement>(){}.getType();
-                json = gson.toJson(tv.elements);
-                System.out.println(json.toString());
-                sendObjectToVolley();
-                System.out.println(json);
+                if(tv.hasSprite()){//before saving checks if a sprite is set in the level
+                    Gson gson = new Gson();
+                    //Type aryType = new TypeToken<GameElement>(){}.getType();
+                    json = gson.toJson(tv.elements);
+                    System.out.println(json.toString());
+                    sendObjectToVolley();
+                    System.out.println(json);
+                }else {//sends toast to user to notify they need to set a sprite
+                    Toast.makeText(this, "Level must have a Sprite before saving",
+                            Toast.LENGTH_LONG).show();
+                }
                 return true;
             case R.id.setSprite:
                 tv.setToSprite();
                 return true;
             case R.id.testLevel:
-                gson = new Gson();
+                Gson gson = new Gson();
                 json = gson.toJson(tv.elements);
                 Intent intention = new Intent(this, GameEngine.class);
                 intention.putExtra("level",json.toString().replaceAll("\"name\":\"Test\",",""));
