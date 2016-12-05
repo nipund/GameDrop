@@ -12,6 +12,10 @@
         app:showAsAction="always"
         android:icon="@android:drawable/ic_input_add"
         android:id="@+id/add_new_element" />
+    <item android:title="Delete Selected Element"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_delete"
+        android:id="@+id/delete_selected_element" />
     <item android:title="Save Level"
         android:id="@+id/saveLevel"
          />

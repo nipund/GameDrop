@@ -80,7 +80,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view){
                 //if(levelToggle == false) {
-                Intent intent = new Intent(MapActivity.this, EditorActivity.class);
+                Intent intent = new Intent(MapActivity.this, GameSelect.class);
                 intent.putExtra("n1",n1);
                 intent.putExtra("n2",n2);
                 startActivity(intent);

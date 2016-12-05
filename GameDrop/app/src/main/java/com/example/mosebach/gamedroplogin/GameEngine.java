@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
@@ -59,7 +60,12 @@ public class GameEngine extends Activity {
     private int score;
     private int collisionPenalty;
     private int timeLeft;
+<<<<<<< HEAD
     private GameElement zombieChow;
+=======
+    MediaPlayer powerUp;
+    MediaPlayer background;
+>>>>>>> 552aa63f2e4bc728398147b50aafa7939cbd3de1
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +73,8 @@ public class GameEngine extends Activity {
         // Initialize gameView and set it as the view
         gameView = new GameView(this);
         setContentView(gameView);
-
+        powerUp = MediaPlayer.create(this,R.raw.star);
+        background = MediaPlayer.create(this,R.raw.background);
     }
 
     // GameView class will go here
@@ -177,7 +184,7 @@ public class GameEngine extends Activity {
         @Override
         public void run() {
             while (playing) {
-
+                background.start();
                 // Capture the current time in milliseconds in startFrameTime
                 long startFrameTime = System.currentTimeMillis();
 
@@ -423,6 +430,7 @@ public class GameEngine extends Activity {
                 }
             if (ge.top() <= sprite.top() && ge.top() > oldSprite.top()){
                     if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
+                        powerUp.start();
                         walkSpeedPerSecond = 300;
                         System.out.println("Hitting power up");
                         //sprite.setGrav(0 /*gravSpeed / fps / 2*/);
