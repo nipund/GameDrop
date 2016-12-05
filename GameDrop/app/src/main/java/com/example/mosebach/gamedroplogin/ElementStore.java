@@ -13,13 +13,11 @@ public class ElementStore {
             R.drawable.plane,
             R.drawable.castle,
             R.drawable.coin,
-<<<<<<< HEAD
             R.drawable.short_platform,
-            R.drawable.long_platform
-=======
+            R.drawable.long_platform,
             R.drawable.star,
-            R.drawable.stary
->>>>>>> 552aa63f2e4bc728398147b50aafa7939cbd3de1
+            R.drawable.stary,
+            R.drawable.wall_block
     };
 
     public static GameElement.ElType types[] = {
@@ -30,13 +28,11 @@ public class ElementStore {
             GameElement.ElType.OBJECT,
             GameElement.ElType.PLATFORM,
             GameElement.ElType.COIN,
-<<<<<<< HEAD
             GameElement.ElType.PLATFORM,
-            GameElement.ElType.PLATFORM
-=======
+            GameElement.ElType.PLATFORM,
             GameElement.ElType.POWERUP,
-            GameElement.ElType.POWERUP
->>>>>>> 552aa63f2e4bc728398147b50aafa7939cbd3de1
+            GameElement.ElType.POWERUP,
+            GameElement.ElType.PLATFORM
     };
 
     public static int sizes[][] = {
@@ -48,10 +44,9 @@ public class ElementStore {
             {400, 100},
             {100, 100},
             {100, 100},
-<<<<<<< HEAD
-            {400, 100}
-=======
-            {100, 100}
->>>>>>> 552aa63f2e4bc728398147b50aafa7939cbd3de1
+            {400, 100},
+            {100, 100},
+            {100, 100},
+            {100, 400}
     };
 }

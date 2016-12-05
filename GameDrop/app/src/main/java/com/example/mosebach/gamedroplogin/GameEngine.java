@@ -69,6 +69,7 @@ public class GameEngine extends Activity {
         // Initialize gameView and set it as the view
         gameView = new GameView(this);
         setContentView(gameView);
+
         powerUp = MediaPlayer.create(this,R.raw.star);
         background = MediaPlayer.create(this,R.raw.background);
     }
@@ -239,6 +240,7 @@ public class GameEngine extends Activity {
             score =  (int)((timer/2500000) - collisionPenalty*(240));
             System.out.println("Collision penalty"+ collisionPenalty + "time left" + timeLeft);
             }else{
+                background.stop();
                 finish();
                 System.out.println("FINISH!");
             }
@@ -416,18 +418,14 @@ public class GameEngine extends Activity {
         private void fixHitboxes(GameElement ge) {
             // sprite's bottom collides with objects top
             if (ge.top() <= sprite.top() && ge.top() > oldSprite.top()) {
-                if(ge.type == GameElement.ElType.PLATFORM) { // Only do this if ge is a platform
+                if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
                     sprite.setBottom(ge.top());
                     sprite.setDy(0);
                     sprite.setGrav(0 /*gravSpeed / fps / 2*/);
-                }
-            if (ge.top() <= sprite.top() && ge.top() > oldSprite.top()){
-                    if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
-                        powerUp.start();
-                        walkSpeedPerSecond = 300;
-                        System.out.println("Hitting power up");
-                        //sprite.setGrav(0 /*gravSpeed / fps / 2*/);
-                    }
+                }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
+                    powerUp.start();
+                    walkSpeedPerSecond = 300;
+                    System.out.println("Hitting power up");
                 }
             } //sprite's top collides with objects bottom
             else if (ge.bottom() >= sprite.top() && ge.bottom() < oldSprite.top()) {
@@ -489,11 +487,5 @@ public class GameEngine extends Activity {
             System.out.println("elapsed time: "+(System.nanoTime() - start));
         }
         return (System.nanoTime() - start);
-    }
-    public void deleteElementOnCollision(GameElement ge){
-        //Add tag in gameElement that allow determines if object is consumable or not
-       /* if(ge.getConsumable() == true){
-
-        }*/
     }
 }
