@@ -90,6 +90,16 @@ public class TileView extends View {
         }
     }
 
+    public boolean hasSprite(){
+        for(int i = 0; i < elements.size(); i++) {
+            GameElement el = elements.get(i);
+            if(el.type == GameElement.ElType.SPRITE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void selectLastElement() {
         selected = elements.size() - 1;
     }
