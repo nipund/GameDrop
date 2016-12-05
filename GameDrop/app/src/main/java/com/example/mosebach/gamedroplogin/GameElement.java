@@ -18,7 +18,7 @@ public class GameElement {
     int width, height;
     String name;
     ElType type;
-    
+
     boolean isSprite;
     //tied to another element?do elements keep score or level?
 
@@ -111,9 +111,9 @@ public class GameElement {
         this.grav = grav;
     }
 
-    public void setConsumable(boolean consumable) {isConsumable = consumable;}
+    //public void setConsumable(boolean consumable) {isConsumable = consumable;}
 
-    public boolean getConsumable() {return isConsumable;};
+    //public boolean getConsumable() {return isConsumable;};
 
 
     public void move() {

@@ -396,9 +396,9 @@ public class GameEngine extends Activity {
                             sprite.bottom() >= ge.top() &&
                             sprite.top() <= ge.bottom()){
                         collisionPenalty++;
-                        if(ge.getConsumable() == true){
+                        /*if(ge.getConsumable() == true){
                          deleteElementOnCollision(ge);
-                        }
+                        }*/
                         fixHitboxes(ge);
                         return true;
                     }
@@ -481,8 +481,8 @@ public class GameEngine extends Activity {
     }
     public void deleteElementOnCollision(GameElement ge){
         //Add tag in gameElement that allow determines if object is consumable or not
-        if(ge.getConsumable() == true){
+       /* if(ge.getConsumable() == true){
 
-        }
+        }*/
     }
 }
