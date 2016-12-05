@@ -412,11 +412,11 @@ public class GameEngine extends Activity {
         private void fixHitboxes(GameElement ge) {
             // sprite's bottom collides with objects top
             if (ge.top() <= sprite.top() && ge.top() > oldSprite.top()) {
-                //if(ge.type == ge.ElType.PLATFORM) { // Only do this if ge is a platform
+                if(ge.type == GameElement.ElType.PLATFORM) { // Only do this if ge is a platform
                     sprite.setBottom(ge.top());
                     sprite.setDy(0);
                     sprite.setGrav(0 /*gravSpeed / fps / 2*/);
-                //}
+                }
 
             } //sprite's top collides with objects bottom
             else if (ge.bottom() >= sprite.top() && ge.bottom() < oldSprite.top()) {

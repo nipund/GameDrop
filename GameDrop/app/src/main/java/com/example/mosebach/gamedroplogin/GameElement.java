@@ -37,8 +37,10 @@ public class GameElement {
         this.width = width;
         this.height = height;
         this.name = name;
+    }
 
-        type = ElType.OBJECT; //isSprite = false;
+    public void setType(ElType type) {
+        this.type = type;
     }
     public void setPic(Drawable pic) {this.pic = pic;}
 
@@ -102,8 +104,6 @@ public class GameElement {
     public void setSprite(boolean sprite) {
         if(sprite) {
             type = ElType.SPRITE;
-        } else {
-            type = ElType.OBJECT;
         }
     }
 
