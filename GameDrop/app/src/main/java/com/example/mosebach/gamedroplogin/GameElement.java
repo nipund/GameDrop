@@ -23,7 +23,7 @@ public class GameElement {
     //tied to another element?do elements keep score or level?
 
     public enum ElType {
-        OBJECT, SPRITE, PLATFORM, COIN, POWERUP
+        OBJECT, SPRITE, PLATFORM, COIN, POWERUP, ZOMBIE
     }
 
     // Set construct
