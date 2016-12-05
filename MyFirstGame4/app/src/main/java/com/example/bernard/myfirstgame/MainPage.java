@@ -17,7 +17,7 @@ public class MainPage extends AppCompatActivity {
     public ImageButton but1;
     public ImageButton but2;
     public void init(){
-        but1 = (ImageButton)findViewById(R.id.imageButton);
+        but1 = (ImageButton)findViewById(R.id.imageButtoni);
         but2 = (ImageButton)findViewById(R.id.imageButton2);
         but1.setOnClickListener(new View.OnClickListener(){
             @Override

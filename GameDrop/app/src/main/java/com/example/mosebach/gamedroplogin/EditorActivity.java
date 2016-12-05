@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EditorActivity extends AppCompatActivity {
+public class  EditorActivity extends AppCompatActivity {
 
     private TileView tv;
     double latititudeGet = 0;
