@@ -417,7 +417,13 @@ public class GameEngine extends Activity {
                     sprite.setDy(0);
                     sprite.setGrav(0 /*gravSpeed / fps / 2*/);
                 }
-
+            if (ge.top() <= sprite.top() && ge.top() > oldSprite.top()){
+                    if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
+                        walkSpeedPerSecond = 300;
+                        System.out.println("Hitting power up");
+                        //sprite.setGrav(0 /*gravSpeed / fps / 2*/);
+                    }
+                }
             } //sprite's top collides with objects bottom
             else if (ge.bottom() >= sprite.top() && ge.bottom() < oldSprite.top()) {
                 sprite.setTop(ge.bottom());

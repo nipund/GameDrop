@@ -12,7 +12,8 @@ public class ElementStore {
             R.drawable.space,
             R.drawable.plane,
             R.drawable.castle,
-            R.drawable.coin
+            R.drawable.coin,
+            R.drawable.star
     };
 
     public static GameElement.ElType types[] = {
@@ -22,7 +23,8 @@ public class ElementStore {
             GameElement.ElType.OBJECT,
             GameElement.ElType.OBJECT,
             GameElement.ElType.PLATFORM,
-            GameElement.ElType.COIN
+            GameElement.ElType.COIN,
+            GameElement.ElType.POWERUP
     };
 
     public static int sizes[][] = {
@@ -32,6 +34,7 @@ public class ElementStore {
             {100, 100},
             {100, 100},
             {400, 100},
+            {100, 100},
             {100, 100}
     };
 }
