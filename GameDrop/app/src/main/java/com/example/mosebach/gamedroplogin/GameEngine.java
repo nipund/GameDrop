@@ -59,6 +59,7 @@ public class GameEngine extends Activity {
     private int score;
     private int collisionPenalty;
     private int timeLeft;
+    private GameElement zombieChow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -217,7 +218,7 @@ public class GameEngine extends Activity {
             sprite.move();
 
             collision = checkHitboxes();
-
+            zombieAI(zombieChow);
             // Draw the frame
             draw();
 
@@ -355,6 +356,9 @@ public class GameEngine extends Activity {
             for(GameElement ge : level.elements) {
                 Drawable d = ContextCompat.getDrawable(getApplicationContext(), ElementStore.elements[ge.pic_id]);
                 ge.setPic(d);
+                if(ge.type == GameElement.ElType.ZOMBIE){
+                    zombieChow = ge;
+                }
             }
             return level;
         }
@@ -485,10 +489,12 @@ public class GameEngine extends Activity {
         }
         return (System.nanoTime() - start);
     }
-    public void deleteElementOnCollision(GameElement ge){
-        //Add tag in gameElement that allow determines if object is consumable or not
-       /* if(ge.getConsumable() == true){
-
-        }*/
+    public void zombieAI(GameElement ge){
+      if(ge.type == GameElement.ElType.ZOMBIE){
+            ge.setDx(15);
+            ge.setGrav(1);
+            ge.move();
+            System.out.println("Zombie Moving");
+      }
     }
 }
