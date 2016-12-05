@@ -10,6 +10,8 @@ public class ElementStore {
             R.drawable.sample_element_1,
             R.drawable.duck,
             R.drawable.space,
-            R.drawable.plane
+            R.drawable.plane,
+            R.drawable.short_platform,
+            R.drawable.long_platform
     };
 }
