@@ -232,7 +232,6 @@ public class GameEngine extends Activity {
             }*/
             long timer = elapsedTime();
             timeLeft = (int)((60000000000.0 - timer)/(1000000000.0));
-            score =  (int)((timer/2500000) - collisionPenalty*(240));
             System.out.println("Collision penalty"+ collisionPenalty + "time left" + timeLeft);
             }else{
                 background.stop();
@@ -395,10 +394,7 @@ public class GameEngine extends Activity {
                             sprite.right() >= ge.left() &&
                             sprite.bottom() >= ge.top() &&
                             sprite.top() <= ge.bottom()){
-                        collisionPenalty++;
-                        /*if(ge.getConsumable() == true){
-                         deleteElementOnCollision(ge);
-                        }*/
+
                         fixHitboxes(ge);
                         collision = true;
                     }
@@ -470,6 +466,10 @@ public class GameEngine extends Activity {
             powerUp.start();
             walkSpeedPerSecond = 300;
             System.out.println("Hitting power up");
+
+            int i = level.elements.indexOf(ge);
+            level.elements.remove(i);
+
         }
 
         int xScale(int x) {
