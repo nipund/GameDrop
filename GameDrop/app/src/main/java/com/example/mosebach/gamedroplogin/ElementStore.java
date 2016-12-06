@@ -14,11 +14,9 @@ public class ElementStore {
             R.drawable.castle,
             R.drawable.coin,
             R.drawable.star,
-<<<<<<< HEAD
-            R.drawable.zombieelf
-=======
-            R.drawable.stary
->>>>>>> 552aa63f2e4bc728398147b50aafa7939cbd3de1
+            R.drawable.zombieelf,
+            R.drawable.stary,
+            R.drawable.flame
     };
 
     public static GameElement.ElType types[] = {
@@ -30,11 +28,9 @@ public class ElementStore {
             GameElement.ElType.PLATFORM,
             GameElement.ElType.COIN,
             GameElement.ElType.POWERUP,
-<<<<<<< HEAD
-            GameElement.ElType.ZOMBIE
-=======
-            GameElement.ElType.POWERUP
->>>>>>> 552aa63f2e4bc728398147b50aafa7939cbd3de1
+            GameElement.ElType.ZOMBIE,
+            GameElement.ElType.POWERUP,
+            GameElement.ElType.FIRE
     };
 
     public static int sizes[][] = {
@@ -46,10 +42,8 @@ public class ElementStore {
             {400, 100},
             {100, 100},
             {100, 100},
-<<<<<<< HEAD
-            {200,200}
-=======
+            {200,200},
+            {100, 100},
             {100, 100}
->>>>>>> 552aa63f2e4bc728398147b50aafa7939cbd3de1
     };
 }

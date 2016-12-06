@@ -60,12 +60,9 @@ public class GameEngine extends Activity {
     private int score;
     private int collisionPenalty;
     private int timeLeft;
-<<<<<<< HEAD
     private GameElement zombieChow;
-=======
     MediaPlayer powerUp;
     MediaPlayer background;
->>>>>>> 552aa63f2e4bc728398147b50aafa7939cbd3de1
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -225,7 +222,7 @@ public class GameEngine extends Activity {
             sprite.move();
 
             collision = checkHitboxes();
-            zombieAI(zombieChow);
+            //zombieAI(zombieChow);
             // Draw the frame
             draw();
 
@@ -431,9 +428,21 @@ public class GameEngine extends Activity {
             if (ge.top() <= sprite.top() && ge.top() > oldSprite.top()){
                     if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
                         powerUp.start();
-                        walkSpeedPerSecond = 300;
+                        walkSpeedPerSecond = walkSpeedPerSecond*2;
                         System.out.println("Hitting power up");
                         //sprite.setGrav(0 /*gravSpeed / fps / 2*/);
+                    }
+                }
+                if (ge.top() <= sprite.top() && ge.top() > oldSprite.top()){
+                    if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
+                        finish();
+                        System.out.println("Hitting power up");
+                    }
+                }
+                if (ge.bottom() <= sprite.top() && ge.bottom() > oldSprite.top()){
+                    if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
+                        finish();
+                        System.out.println("Hitting power up");
                     }
                 }
             } //sprite's top collides with objects bottom
