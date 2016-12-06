@@ -25,19 +25,9 @@ public class GameSelect extends AppCompatActivity {
         }init();
     }
     public void init(){
-        but1 = (Button)findViewById(R.id.button2);
+
         but2 = (Button)findViewById(R.id.button4);
-        but1.setOnClickListener(new View.OnClickListener(){
 
-            public void onClick(View v){
-                Intent intent = new Intent(GameSelect.this, EditorActivity.class);
-                intent.putExtra("type","Helicopter");
-                intent.putExtra("n1",latititudeGet);
-                intent.putExtra("n2",longitudeGet);
-                startActivity(intent);
-            }
-
-        });
         but2.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
