@@ -434,6 +434,8 @@ public class GameEngine extends Activity {
                 sprite.setGrav(0);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
                 powerupCollision(ge);
+            }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
+                fireCollision(ge);
             }
         }
 
@@ -444,6 +446,8 @@ public class GameEngine extends Activity {
                 sprite.setGrav(1);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
                 powerupCollision(ge);
+            }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
+                fireCollision(ge);
             }
         }
 
@@ -453,6 +457,8 @@ public class GameEngine extends Activity {
                 sprite.setDx(0);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
                 powerupCollision(ge);
+            }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
+                fireCollision(ge);
             }
         }
 
@@ -462,6 +468,8 @@ public class GameEngine extends Activity {
                 sprite.setDx(0);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
                 powerupCollision(ge);
+            }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
+                fireCollision(ge);
             }
         }
 
@@ -469,6 +477,10 @@ public class GameEngine extends Activity {
             powerUp.start();
             walkSpeedPerSecond = 300;
             System.out.println("Hitting power up");
+        }
+        private void fireCollision(GameElement ge){
+            finish();
+            System.out.println("Fire touched");
         }
 
         int xScale(int x) {
