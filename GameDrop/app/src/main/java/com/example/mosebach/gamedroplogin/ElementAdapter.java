@@ -57,6 +57,9 @@ public class ElementAdapter extends BaseAdapter {
             ElementStore.elements[7],
             ElementStore.elements[8],
             ElementStore.elements[9],
-            ElementStore.elements[10]
+            ElementStore.elements[10],
+            ElementStore.elements[11],
+            ElementStore.elements[12],
+            ElementStore.elements[13]
     };
 }

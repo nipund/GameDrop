@@ -13,9 +13,12 @@ public class ElementStore {
             R.drawable.plane,
             R.drawable.castle,
             R.drawable.coin,
+            R.drawable.short_platform,
+            R.drawable.long_platform,
             R.drawable.star,
-            R.drawable.zombieelf,
             R.drawable.stary,
+            R.drawable.wall_block,
+            R.drawable.zombieelf,
             R.drawable.flame
     };
 
@@ -27,9 +30,12 @@ public class ElementStore {
             GameElement.ElType.OBJECT,
             GameElement.ElType.PLATFORM,
             GameElement.ElType.COIN,
+            GameElement.ElType.PLATFORM,
+            GameElement.ElType.PLATFORM,
             GameElement.ElType.POWERUP,
+            GameElement.ElType.POWERUP,
+            GameElement.ElType.PLATFORM,
             GameElement.ElType.ZOMBIE,
-            GameElement.ElType.POWERUP,
             GameElement.ElType.FIRE
     };
 
@@ -42,8 +48,11 @@ public class ElementStore {
             {400, 100},
             {100, 100},
             {100, 100},
-            {200,200},
+            {400, 100},
             {100, 100},
+            {100, 100},
+            {100, 400},
+            {200, 200},
             {100, 100}
     };
 }

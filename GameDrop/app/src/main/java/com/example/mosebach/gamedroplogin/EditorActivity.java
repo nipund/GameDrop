@@ -78,12 +78,18 @@ public class  EditorActivity extends AppCompatActivity {
                 tv.setToSprite();
                 return true;
             case R.id.testLevel:
-                Gson gson = new Gson();
-                json = gson.toJson(tv.elements);
-                Intent intention = new Intent(this, GameEngine.class);
-                intention.putExtra("level",json.toString().replaceAll("\"name\":\"Test\",",""));
-                startActivity(intention);
-                System.out.println("json test" + json.toString().replaceAll("\"name\":\"Test\",",""));
+                if(tv.hasSprite()){
+                    Gson gson = new Gson();
+                    json = gson.toJson(tv.elements);
+                    Intent intention = new Intent(this, GameEngine.class);
+                    intention.putExtra("level",json.toString().replaceAll("\"name\":\"Test\",",""));
+                    startActivity(intention);
+                    System.out.println("json test" + json.toString().replaceAll("\"name\":\"Test\",",""));
+                }else{
+                    Toast.makeText(this, "Level must have a Sprite before testing",
+                            Toast.LENGTH_LONG).show();
+                }
+
                 return true;
             case R.id.delete_selected_element:
                 tv.removeSelectedElement();
