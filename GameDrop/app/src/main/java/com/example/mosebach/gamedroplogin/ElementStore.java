@@ -19,7 +19,8 @@ public class ElementStore {
             R.drawable.stary,
             R.drawable.wall_block,
             R.drawable.zombieelf,
-            R.drawable.flame
+            R.drawable.flame,
+            R.drawable.warp
     };
 
     public static GameElement.ElType types[] = {
@@ -36,7 +37,8 @@ public class ElementStore {
             GameElement.ElType.POWERUP,
             GameElement.ElType.PLATFORM,
             GameElement.ElType.ZOMBIE,
-            GameElement.ElType.FIRE
+            GameElement.ElType.FIRE,
+            GameElement.ElType.WARP
     };
 
     public static int sizes[][] = {
@@ -53,6 +55,7 @@ public class ElementStore {
             {100, 100},
             {100, 400},
             {200, 200},
-            {100, 100}
+            {100, 100},
+            {150,200}
     };
 }

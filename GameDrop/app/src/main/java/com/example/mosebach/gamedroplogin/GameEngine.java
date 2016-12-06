@@ -41,6 +41,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Timer;
 
 import static java.lang.Thread.sleep;
@@ -428,7 +429,7 @@ public class GameEngine extends Activity {
         }
 
         private void bottomCollision(GameElement ge){
-            if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
+            if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT||ge.type == GameElement.ElType.ZOMBIE) { // Only do this if ge is a platform
                 sprite.setBottom(ge.top());
                 sprite.setDy(0);
                 sprite.setGrav(0);
@@ -436,11 +437,13 @@ public class GameEngine extends Activity {
                 powerupCollision(ge);
             }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
                 fireCollision(ge);
+            }else if (ge.type == GameElement.ElType.WARP) { // Only do this if ge is a platform
+                warpCollision(sprite);
             }
         }
 
         private void topCollision(GameElement ge){
-            if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
+            if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT ||ge.type == GameElement.ElType.ZOMBIE) { // Only do this if ge is a platform
                 sprite.setTop(ge.bottom());
                 sprite.setDy(0);
                 sprite.setGrav(1);
@@ -448,28 +451,34 @@ public class GameEngine extends Activity {
                 powerupCollision(ge);
             }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
                 fireCollision(ge);
+            }else if (ge.type == GameElement.ElType.WARP) { // Only do this if ge is a platform
+                warpCollision(sprite);
             }
         }
 
         private void rightCollision(GameElement ge){
-            if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
+            if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT||ge.type == GameElement.ElType.ZOMBIE) { // Only do this if ge is a platform
                 sprite.setRight(ge.left());
                 sprite.setDx(0);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
                 powerupCollision(ge);
             }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
                 fireCollision(ge);
+            }else if (ge.type == GameElement.ElType.WARP) { // Only do this if ge is a platform
+                warpCollision(sprite);
             }
         }
 
         private void leftCollision(GameElement ge){
-            if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
+            if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT||ge.type == GameElement.ElType.ZOMBIE) { // Only do this if ge is a platform
                 sprite.setLeft(ge.right());
                 sprite.setDx(0);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
                 powerupCollision(ge);
             }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
                 fireCollision(ge);
+            }else if (ge.type == GameElement.ElType.WARP) { // Only do this if ge is a platform
+                warpCollision(sprite);
             }
         }
 
@@ -481,6 +490,13 @@ public class GameEngine extends Activity {
         private void fireCollision(GameElement ge){
             finish();
             System.out.println("Fire touched");
+        }
+        private void warpCollision(GameElement sprite){
+            Random rand = new Random();
+            sprite.setX(rand.nextInt(1000)+0);
+            System.out.println("Random X: "+rand.nextInt(1000));
+            sprite.setY(rand.nextInt(1000)+0);
+            System.out.println("Random Y: "+rand.nextInt(1000));
         }
 
         int xScale(int x) {
