@@ -18,7 +18,8 @@ public class ElementStore {
             R.drawable.star,
             R.drawable.stary,
             R.drawable.wall_block,
-            R.drawable.zombieelf
+            R.drawable.zombieelf,
+            R.drawable.flame
     };
 
     public static GameElement.ElType types[] = {
@@ -34,7 +35,8 @@ public class ElementStore {
             GameElement.ElType.POWERUP,
             GameElement.ElType.POWERUP,
             GameElement.ElType.PLATFORM,
-            GameElement.ElType.ZOMBIE
+            GameElement.ElType.ZOMBIE,
+            GameElement.ElType.FIRE
     };
 
     public static int sizes[][] = {
@@ -50,6 +52,7 @@ public class ElementStore {
             {100, 100},
             {100, 100},
             {100, 400},
-            {200, 200}
+            {200, 200},
+            {100, 100}
     };
 }

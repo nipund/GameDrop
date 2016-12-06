@@ -61,7 +61,6 @@ public class GameEngine extends Activity {
     private int collisionPenalty;
     private int timeLeft;
     private GameElement zombieChow;
-
     MediaPlayer powerUp;
     MediaPlayer background;
     @Override
@@ -215,8 +214,8 @@ public class GameEngine extends Activity {
                 oldSprite = sprite.clone();
             }
             sprite.move();
-
             checkHitboxes();
+
             //zombieAI(zombieChow);
             // Draw the frame
             draw();
@@ -431,6 +430,8 @@ public class GameEngine extends Activity {
                 sprite.setGrav(0);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
                 powerupCollision(ge);
+            }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
+                fireCollision(ge);
             }
         }
 
@@ -441,6 +442,8 @@ public class GameEngine extends Activity {
                 sprite.setGrav(1);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
                 powerupCollision(ge);
+            }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
+                fireCollision(ge);
             }
         }
 
@@ -450,6 +453,8 @@ public class GameEngine extends Activity {
                 sprite.setDx(0);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
                 powerupCollision(ge);
+            }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
+                fireCollision(ge);
             }
         }
 
@@ -459,6 +464,8 @@ public class GameEngine extends Activity {
                 sprite.setDx(0);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
                 powerupCollision(ge);
+            }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
+                fireCollision(ge);
             }
         }
 
@@ -470,6 +477,10 @@ public class GameEngine extends Activity {
             int i = level.elements.indexOf(ge);
             level.elements.remove(i);
 
+        }
+        private void fireCollision(GameElement ge){
+            finish();
+            System.out.println("Fire touched");
         }
 
         int xScale(int x) {
