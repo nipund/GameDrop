@@ -2,6 +2,10 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:title="Set Background"
+        android:id="@+id/setBg"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_bg" />
     <item android:title="Set current to sprite"
         android:id="@+id/setSprite" />
     <item android:title="Next Element"

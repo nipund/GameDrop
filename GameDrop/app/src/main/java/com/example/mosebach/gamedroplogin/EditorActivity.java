@@ -1,13 +1,16 @@
 package com.example.mosebach.gamedroplogin;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -77,6 +80,9 @@ public class  EditorActivity extends AppCompatActivity {
             case R.id.setSprite:
                 tv.setToSprite();
                 return true;
+            case R.id.setBg:
+                showBgDialog();
+                return true;
             case R.id.testLevel:
                 if(tv.hasSprite() && tv.hasCoins()){
                     Gson gson = new Gson();
@@ -97,6 +103,22 @@ public class  EditorActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showBgDialog() {
+        String items[] = new String[] {"Grass", "Full Moon", "Lava"};
+        new AlertDialog.Builder(this)
+                .setTitle("Set Background")
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        System.out.println("Background set to: "+which);
+                        tv.bg_id = which;
+                        tv.bg = ContextCompat.getDrawable(getApplicationContext(), BackgroundStore.bgs[which]);
+                        tv.setBg(which);
+                    }
+                })
+                .setIcon(android.R.drawable.ic_menu_gallery)
+                .show();
     }
 
     @Override

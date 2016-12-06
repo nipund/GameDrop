@@ -18,12 +18,13 @@ public class GameElement {
     int width, height;
     String name;
     ElType type;
+    String data;
 
     boolean isSprite;
     //tied to another element?do elements keep score or level?
 
     public enum ElType {
-        OBJECT, SPRITE, PLATFORM, COIN, POWERUP, ZOMBIE, FIRE
+        OBJECT, SPRITE, PLATFORM, COIN, POWERUP, ZOMBIE, FIRE, NONDRAWABLE
     }
 
     // Set construct
@@ -37,6 +38,13 @@ public class GameElement {
         this.width = width;
         this.height = height;
         this.name = name;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+        this.type = ElType.NONDRAWABLE;
+        this.x = -1000;
+        this.y = -1000;
     }
 
     public void setType(ElType type) {

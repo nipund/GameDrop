@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -19,6 +20,8 @@ public class TileView extends View {
     private Paint paint;
     ArrayList<GameElement> elements;
     private int selected;
+    public int bg_id = -1;
+    public Drawable bg;
 
     public TileView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,12 +33,16 @@ public class TileView extends View {
     @Override
     protected void onDraw(Canvas c) {
         paint.setAntiAlias(true);
-        drawGrid(c, 20, 16);
+        drawBg(c);
+        drawGrid(c, 16, 32);
         paint.setARGB(255, 0, 255, 0);
 
         if(elements != null) {
             for(int i = 0; i < elements.size(); i++) {
                 GameElement ge = elements.get(i);
+                if(ge.type == GameElement.ElType.NONDRAWABLE) {
+                    continue;
+                }
                 Drawable d = ge.pic;
                 d.setBounds(ge.x, ge.y, ge.getRight(), ge.getBottom());
                 d.setAlpha(255);
@@ -48,6 +55,12 @@ public class TileView extends View {
                 }
             }
         }
+    }
+
+    private void drawBg(Canvas c) {
+        if(bg_id == -1 || bg == null)
+            return;
+        setBackground(bg);
     }
 
     private void drawGrid(Canvas c, int rows, int columns) {
@@ -129,6 +142,19 @@ public class TileView extends View {
 
     public void selectLastElement() {
         selected = elements.size() - 1;
+    }
+
+    public void setBg(int bg) {
+        for(int i = 0; i < elements.size(); i++) {
+            GameElement el = elements.get(i);
+            if(el.type == GameElement.ElType.NONDRAWABLE) {
+                elements.remove(i);
+                //break;
+            }
+        }
+        GameElement el2 = new GameElement();
+        el2.setData(String.valueOf(bg));
+        elements.add(el2);
     }
 }
 

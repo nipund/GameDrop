@@ -251,8 +251,15 @@ public class GameEngine extends Activity {
                 // Lock the canvas ready to draw
                 canvas = ourHolder.lockCanvas();
 
-                // Draw the background color
                 canvas.drawColor(Color.argb(255,  26, 128, 182));
+
+                // Draw the background color
+                //Drawable background = ContextCompat.getDrawable(getApplicationContext(), BackgroundStore.bgs[3]);
+                Drawable d = getResources().getDrawable(BackgroundStore.bgs[1]);
+                d.setBounds(0, 0, getRight(), getBottom());
+                d.draw(canvas);
+                //setBackground(background);
+                //background.draw(canvas);
 
                 // Choose the brush color for drawing
                 paint.setColor(Color.argb(255,  249, 129, 0));
@@ -374,6 +381,9 @@ public class GameEngine extends Activity {
 
             for(int i = 0; i < elements.size(); i++){
                 GameElement ge = elements.get(i);
+                if(ge.type == GameElement.ElType.NONDRAWABLE) {
+                    continue;
+                }
                 Drawable d = ge.pic;
                 d.setBounds(xScale(ge.x), yScale(ge.y), xScale(ge.getRight()), yScale(ge.getBottom()));
                 //System.out.println(""+xScale(ge.x)+","+yScale(ge.y)+","+xScale(ge.getRight())+","+yScale(ge.getBottom()));
