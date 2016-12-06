@@ -26,7 +26,7 @@ public class GameSelect extends AppCompatActivity {
     }
     public void init(){
 
-        but2 = (Button)findViewById(R.id.button4);
+        but2 = (Button)findViewById(R.id.button2);
 
         but2.setOnClickListener(new View.OnClickListener(){
 
