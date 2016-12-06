@@ -3,6 +3,7 @@ package com.example.mosebach.gamedroplogin;
 import android.graphics.drawable.Drawable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Class that holds all level details and to be loaded on a play request
@@ -14,6 +15,7 @@ public class Level {
     String description;
     String name;
     Drawable background;
+    ArrayList<GameElement> coins;
     //score?time?
 
     // Set Construct
@@ -22,6 +24,7 @@ public class Level {
         description = desc;
         this.name = name;
         background = bkgr;
+        coins = new ArrayList<GameElement>();
     }
 
     // Default construct
@@ -30,6 +33,23 @@ public class Level {
         description = "";
         this.name = "";
         background = null;
+    }
+
+    public void getCoins(){
+        for(int i = 0; i < elements.size(); i++){
+            if(elements.get(i).type == GameElement.ElType.COIN){
+                coins.add(elements.get(i));
+                elements.remove(i);
+                i--;
+            }
+        }
+    }
+
+    public void setCoin(){
+        Random rand = new Random();
+
+        elements.add(coins.get(rand.nextInt(coins.size())));
+
     }
 
 }

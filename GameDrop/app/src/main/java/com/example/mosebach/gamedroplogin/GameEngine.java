@@ -73,6 +73,8 @@ public class GameEngine extends Activity {
 
         powerUp = MediaPlayer.create(this,R.raw.star);
         background = MediaPlayer.create(this,R.raw.background);
+
+        score = 0;
     }
 
     // GameView class will go here
@@ -165,7 +167,9 @@ public class GameEngine extends Activity {
 
             sprite = getSprite();
 
+            level.getCoins();
 
+            level.setCoin();
             // Set our boolean to true - game on!
             playing = true;
 
@@ -432,6 +436,8 @@ public class GameEngine extends Activity {
                 powerupCollision(ge);
             }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
                 fireCollision(ge);
+            }else if(ge.type == GameElement.ElType.COIN){
+                coinCollision(ge);
             }
         }
 
@@ -444,6 +450,8 @@ public class GameEngine extends Activity {
                 powerupCollision(ge);
             }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
                 fireCollision(ge);
+            }else if(ge.type == GameElement.ElType.COIN){
+                coinCollision(ge);
             }
         }
 
@@ -455,6 +463,8 @@ public class GameEngine extends Activity {
                 powerupCollision(ge);
             }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
                 fireCollision(ge);
+            }else if(ge.type == GameElement.ElType.COIN){
+                coinCollision(ge);
             }
         }
 
@@ -466,6 +476,8 @@ public class GameEngine extends Activity {
                 powerupCollision(ge);
             }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
                 fireCollision(ge);
+            }else if(ge.type == GameElement.ElType.COIN){
+                coinCollision(ge);
             }
         }
 
@@ -481,6 +493,12 @@ public class GameEngine extends Activity {
         private void fireCollision(GameElement ge){
             finish();
             System.out.println("Fire touched");
+        }
+
+        private void coinCollision(GameElement ge){
+            score++;
+            level.elements.remove(ge);
+            level.setCoin();
         }
 
         int xScale(int x) {

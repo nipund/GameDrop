@@ -100,6 +100,21 @@ public class TileView extends View {
         return false;
     }
 
+    public boolean hasCoins(){
+        int count = 0;
+        for(int i = 0; i < elements.size(); i++) {
+            GameElement el = elements.get(i);
+            if(el.type == GameElement.ElType.COIN) {
+                count++;
+            }
+        }
+        if(count > 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public void removeSelectedElement(){
         for(int i = 0; i < elements.size(); i++){
             if(i == selected){
