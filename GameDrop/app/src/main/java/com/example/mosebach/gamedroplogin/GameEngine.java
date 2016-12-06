@@ -74,6 +74,8 @@ public class GameEngine extends Activity {
 
         powerUp = MediaPlayer.create(this,R.raw.star);
         background = MediaPlayer.create(this,R.raw.background);
+
+        score = 0;
     }
 
     // GameView class will go here
@@ -166,7 +168,9 @@ public class GameEngine extends Activity {
 
             sprite = getSprite();
 
+            level.getCoins();
 
+            level.setCoin();
             // Set our boolean to true - game on!
             playing = true;
 
@@ -232,7 +236,6 @@ public class GameEngine extends Activity {
             }*/
             long timer = elapsedTime();
             timeLeft = (int)((60000000000.0 - timer)/(1000000000.0));
-            score =  (int)((timer/2500000) - collisionPenalty*(240));
             System.out.println("Collision penalty"+ collisionPenalty + "time left" + timeLeft);
             }else{
                 background.stop();
@@ -395,10 +398,7 @@ public class GameEngine extends Activity {
                             sprite.right() >= ge.left() &&
                             sprite.bottom() >= ge.top() &&
                             sprite.top() <= ge.bottom()){
-                        collisionPenalty++;
-                        /*if(ge.getConsumable() == true){
-                         deleteElementOnCollision(ge);
-                        }*/
+
                         fixHitboxes(ge);
                         collision = true;
                     }
@@ -437,9 +437,11 @@ public class GameEngine extends Activity {
                 powerupCollision(ge);
             }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
                 fireCollision(ge);
+            }else if(ge.type == GameElement.ElType.COIN){
+                coinCollision(ge);
             }else if (ge.type == GameElement.ElType.WARP) { // Only do this if ge is a platform
-                warpCollision(sprite);
-            }
+            warpCollision(sprite);
+        }
         }
 
         private void topCollision(GameElement ge){
@@ -451,6 +453,8 @@ public class GameEngine extends Activity {
                 powerupCollision(ge);
             }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
                 fireCollision(ge);
+            }else if(ge.type == GameElement.ElType.COIN){
+                coinCollision(ge);
             }else if (ge.type == GameElement.ElType.WARP) { // Only do this if ge is a platform
                 warpCollision(sprite);
             }
@@ -464,6 +468,8 @@ public class GameEngine extends Activity {
                 powerupCollision(ge);
             }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
                 fireCollision(ge);
+            }else if(ge.type == GameElement.ElType.COIN){
+                coinCollision(ge);
             }else if (ge.type == GameElement.ElType.WARP) { // Only do this if ge is a platform
                 warpCollision(sprite);
             }
@@ -477,6 +483,8 @@ public class GameEngine extends Activity {
                 powerupCollision(ge);
             }else if (ge.type == GameElement.ElType.FIRE) { // Only do this if ge is a platform
                 fireCollision(ge);
+            }else if(ge.type == GameElement.ElType.COIN){
+                coinCollision(ge);
             }else if (ge.type == GameElement.ElType.WARP) { // Only do this if ge is a platform
                 warpCollision(sprite);
             }
@@ -486,6 +494,10 @@ public class GameEngine extends Activity {
             powerUp.start();
             walkSpeedPerSecond = 300;
             System.out.println("Hitting power up");
+
+            int i = level.elements.indexOf(ge);
+            level.elements.remove(i);
+
         }
         private void fireCollision(GameElement ge){
             finish();
@@ -497,6 +509,12 @@ public class GameEngine extends Activity {
             System.out.println("Random X: "+rand.nextInt(1000));
             sprite.setY(rand.nextInt(1000)+0);
             System.out.println("Random Y: "+rand.nextInt(1000));
+        }
+
+        private void coinCollision(GameElement ge){
+            score++;
+            level.elements.remove(ge);
+            level.setCoin();
         }
 
         int xScale(int x) {

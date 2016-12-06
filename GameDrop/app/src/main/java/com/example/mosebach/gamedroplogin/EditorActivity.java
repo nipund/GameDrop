@@ -62,7 +62,7 @@ public class  EditorActivity extends AppCompatActivity {
                 tv.invalidate();
                 return true;
             case R.id.saveLevel:
-                if(tv.hasSprite()){//before saving checks if a sprite is set in the level
+                if(tv.hasSprite() && tv.hasCoins()){//before saving checks if a sprite is set in the level
                     Gson gson = new Gson();
                     //Type aryType = new TypeToken<GameElement>(){}.getType();
                     json = gson.toJson(tv.elements);
@@ -70,7 +70,7 @@ public class  EditorActivity extends AppCompatActivity {
                     sendObjectToVolley();
                     System.out.println(json);
                 }else {//sends toast to user to notify they need to set a sprite
-                    Toast.makeText(this, "Level must have a Sprite before saving",
+                    Toast.makeText(this, "Level must have a Sprite and two coins before saving",
                             Toast.LENGTH_LONG).show();
                 }
                 return true;
@@ -78,7 +78,7 @@ public class  EditorActivity extends AppCompatActivity {
                 tv.setToSprite();
                 return true;
             case R.id.testLevel:
-                if(tv.hasSprite()){
+                if(tv.hasSprite() && tv.hasCoins()){
                     Gson gson = new Gson();
                     json = gson.toJson(tv.elements);
                     Intent intention = new Intent(this, GameEngine.class);
@@ -86,7 +86,7 @@ public class  EditorActivity extends AppCompatActivity {
                     startActivity(intention);
                     System.out.println("json test" + json.toString().replaceAll("\"name\":\"Test\",",""));
                 }else{
-                    Toast.makeText(this, "Level must have a Sprite before testing",
+                    Toast.makeText(this, "Level must have a Sprite and two coins before testing",
                             Toast.LENGTH_LONG).show();
                 }
 
