@@ -198,13 +198,6 @@ public class GameEngine extends Activity {
                 if (timeThisFrame > 0) {
                     fps = (int) ((int) 1000 / timeThisFrame);
                 }
-                try {
-                    //if(fps > 20 && fps < 100) {
-                    //sprite.setGrav(1 /*gravSpeed / fps / 2*/);
-                    //}
-                }catch(Exception e) {
-
-                }
 
             }
 
@@ -223,7 +216,7 @@ public class GameEngine extends Activity {
             }
             sprite.move();
 
-            collision = checkHitboxes();
+            checkHitboxes();
             //zombieAI(zombieChow);
             // Draw the frame
             draw();
@@ -322,10 +315,8 @@ public class GameEngine extends Activity {
 
                     if(touchLocation > xScale(950)){
                         sprite.setDx( walkSpeedPerSecond / fps);
-                        //sprite.setGrav(walkSpeedPerSecond / fps / 2);
                     }else{
                         sprite.setDx( -walkSpeedPerSecond / fps );
-                        //sprite.setGrav(-walkSpeedPerSecond / fps / 2);
                     }
 
                     break;
@@ -336,10 +327,8 @@ public class GameEngine extends Activity {
 
                     if(touchLocation > xScale(950)){
                         sprite.setDx( walkSpeedPerSecond / fps);
-                        //sprite.setGrav(walkSpeedPerSecond / fps / 2);
                     }else{
                         sprite.setDx( -walkSpeedPerSecond / fps );
-                        //sprite.setGrav(-walkSpeedPerSecond / fps / 2);
                     }
 
                     break;
@@ -348,7 +337,6 @@ public class GameEngine extends Activity {
                 case MotionEvent.ACTION_UP:
 
                     sprite.setDx(0);
-                    //sprite.setGrav(0);
 
                     break;
             }
@@ -393,8 +381,9 @@ public class GameEngine extends Activity {
             }
         }
 
-        private boolean checkHitboxes(){
+        private void checkHitboxes(){
 
+            boolean collision = false;
             //check every element with sprite
             for(int i = 0; i < level.elements.size(); i++){
 
@@ -411,13 +400,16 @@ public class GameEngine extends Activity {
                          deleteElementOnCollision(ge);
                         }*/
                         fixHitboxes(ge);
-                        return true;
+                        collision = true;
                     }
                 }
             }
-            sprite.setGrav(1 /*gravSpeed / fps / 2*/);
+            if(!collision){
+                sprite.setGrav(1);
 
-            return false;
+            }
+
+            return;
         }
 
         private void fixHitboxes(GameElement ge) {
@@ -428,10 +420,10 @@ public class GameEngine extends Activity {
             else if (ge.bottom() >= sprite.top() && ge.bottom() < oldSprite.top()) {
                 topCollision(ge);
             } // sprite's right collides with objects left
-            else if (ge.left() <= sprite.right() && ge.left() > oldSprite.right()) {
+            else if (ge.left() <= sprite.right() && ge.left() >= oldSprite.right()) {
                 rightCollision(ge);
             } // sprite's left collides with objects right
-            else if (ge.right() >= sprite.left() && ge.right() < oldSprite.left()) {
+            else if (ge.right() >= sprite.left() && ge.right() <= oldSprite.left()) {
                 leftCollision(ge);
             }
         }
@@ -440,9 +432,9 @@ public class GameEngine extends Activity {
             if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
                 sprite.setBottom(ge.top());
                 sprite.setDy(0);
-                sprite.setGrav(0 /*gravSpeed / fps / 2*/);
+                sprite.setGrav(0);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
-                powerupCollision();
+                powerupCollision(ge);
             }
         }
 
@@ -452,29 +444,29 @@ public class GameEngine extends Activity {
                 sprite.setDy(0);
                 sprite.setGrav(1);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
-                powerupCollision();
+                powerupCollision(ge);
             }
         }
 
         private void rightCollision(GameElement ge){
             if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
                 sprite.setRight(ge.left());
-                sprite.setGrav(1);
+                sprite.setDx(0);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
-                powerupCollision();
+                powerupCollision(ge);
             }
         }
 
         private void leftCollision(GameElement ge){
             if(ge.type == GameElement.ElType.PLATFORM || ge.type == GameElement.ElType.OBJECT) { // Only do this if ge is a platform
                 sprite.setLeft(ge.right());
-                sprite.setGrav(1);
+                sprite.setDx(0);
             }else if (ge.type == GameElement.ElType.POWERUP) { // Only do this if ge is a platform
-                powerupCollision();
+                powerupCollision(ge);
             }
         }
 
-        private void powerupCollision(){
+        private void powerupCollision(GameElement ge){
             powerUp.start();
             walkSpeedPerSecond = 300;
             System.out.println("Hitting power up");
