@@ -1,0 +1,8 @@
+GameDrop/*.iml
+GameDrop/.gradle
+GameDrop/local.properties
+GameDrop/.idea/workspace.xml
+GameDrop/.idea/libraries
+GameDrop/.DS_Store
+GameDrop/build
+GameDrop/captures

@@ -247,7 +247,7 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
                         try {
                             VolleyLog.v("Response:%n %s", response.toString(4));
                             if(response.getBoolean("success")){
-                                intent = new Intent(LocationPage.this, GameEngine.class);
+                                intent = new Intent(LocationPage.this, LineExample.class);
                                 String levelArray  = response.getString("level");
                                 //System.out.println("This is the level " + levelArray);
                                 intent.putExtra("level",levelArray);
