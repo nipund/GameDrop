@@ -79,11 +79,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         moveToLocation.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                //if(levelToggle == false) {
-                Intent intent = new Intent(MapActivity.this, GameSelect.class);
-                intent.putExtra("n1",n1);
-                intent.putExtra("n2",n2);
-                startActivity(intent);
+
             }
         });
     }
@@ -119,11 +115,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     public boolean onMarkerClick(Marker marker) {
                         if(marker.getTitle() != null){
                             //if(markerToggle == false) {
-                            Intent intent = new Intent(MapActivity.this, LocationPage.class);
+                            /*Intent intent = new Intent(MapActivity.this, LocationPage.class);
                             intent.putExtra("n1",n1);
                             intent.putExtra("n2",n2);
                             System.out.println("Attempting to go to location page");
-                            startActivity(intent);
+                            startActivity(intent);*/
                             //levelToggle = true;
                             //}
                         }

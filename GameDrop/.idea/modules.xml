@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GameDrop.iml" filepath="$PROJECT_DIR$/GameDrop.iml" />
       <module fileurl="file://$PROJECT_DIR$/andengine/andengine.iml" filepath="$PROJECT_DIR$/andengine/andengine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/andenginephysicsbox2dextension/andenginephysicsbox2dextension.iml" filepath="$PROJECT_DIR$/andenginephysicsbox2dextension/andenginephysicsbox2dextension.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

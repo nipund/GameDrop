@@ -22,12 +22,11 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="andrid.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".MapActivity" />
-        <activity android:name=".LocationPage" />
+        <activity android:name=".LineExample" android:exported="true" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -43,11 +42,6 @@
         <activity
             android:name=".ElementSelectorActivity"
             android:screenOrientation="landscape" />
-        <activity
-            android:name=".GameEngine"
-            android:exported="true"
-            android:screenOrientation="landscape" />
-        <activity android:name=".GameSelect"></activity>
     </application>
 
 </manifest>
